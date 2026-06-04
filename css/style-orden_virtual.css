@@ -1,0 +1,53 @@
+/* --- ESTILOS ESPECÍFICOS PARA ORDEN VIRTUAL --- */
+
+/* Títulos de las tarjetas */
+.form-section-card h6 {
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+/* Campos de solo lectura (Autocompletados) */
+input[readonly] {
+    background-color: #f8f9fa !important;
+    border: 1px solid #e9ecef;
+    cursor: not-allowed;
+}
+
+/* Botones de Cabecera */
+.header-actions .btn-outline-secondary {
+    color: #475569;
+    border-color: #cbd5e1;
+}
+
+.header-actions .btn-outline-secondary:hover {
+    background-color: #f1f5f9;
+    color: #1e293b;
+}
+
+.header-actions .btn-outline-dark {
+    color: #1e293b;
+    border-color: #94a3b8;
+}
+
+.header-actions .btn-outline-dark:hover {
+    background-color: #1e293b;
+    color: white;
+}
+
+/* Etiquetas de los estudios agregados (Badges) */
+.badge {
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+/* Botón Guardar Orden */
+button[type="submit"].btn-primary {
+    background: linear-gradient(135deg, #2D89EF 0%, #1e5ab3 100%);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+button[type="submit"].btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(45, 137, 239, 0.3) !important;
+}

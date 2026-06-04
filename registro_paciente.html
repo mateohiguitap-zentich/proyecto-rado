@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Paciente - Sistema RADO</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style-dashboard.css">
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <p class="mb-0 fw-bold border-bottom pb-2 text-white">FACTURACIÓN RADO</p>
+            </div>
+            <ul class="nav flex-column mt-4">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-grid-fill"></i> PANEL DE CONTROL</a></li>
+                <li class="nav-item"><a href="registro_paciente.html" class="nav-link active"><i class="bi bi-person-badge"></i> REGISTRO DE PACIENTE</a></li>
+                <li class="nav-item"><a href="orden_virtual.html" class="nav-link"><i class="bi bi-file-earmark-medical"></i> ORDEN VIRTUAL</a></li>
+                <li class="nav-item"><a href="facturacion_electronica.html" class="nav-link"><i class="bi bi-receipt"></i> FACTURA ELECTRÓNICA</a></li>
+                <li class="nav-item"><a href="generar_reporte.html" class="nav-link"><i class="bi bi-bar-chart-line"></i> GENERAR REPORTE</a></li>
+                <li class="nav-item"><a href="gestion_usuarios.html" class="nav-link"><i class="bi bi-people"></i> GESTIÓN DE USUARIO</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="index.html" class="text-white text-decoration-none small"><i class="bi bi-box-arrow-left"></i> SALIR DEL SISTEMA</a>
+            </div>
+        </nav>
+
+        <main class="content-area">
+            <header class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0 h4 text-dark">REGISTRO DE PACIENTE</h2>
+                <div class="header-actions">
+                    <button class="btn btn-success btn-sm me-2 shadow-sm"><i class="bi bi-floppy"></i> Guardar</button>
+                    <button class="btn btn-primary btn-sm me-2 shadow-sm"><i class="bi bi-plus-lg"></i> Agregar</button>
+                    <button class="btn btn-secondary btn-sm shadow-sm"><i class="bi bi-search"></i> Buscar</button>
+                </div>
+            </header>
+
+            <form class="row g-4 pb-5">
+                <div class="col-lg-6">
+                    <div class="form-section-card shadow-sm p-4 h-100">
+                        <h6 class="fw-bold border-bottom pb-2 mb-3">SECCIÓN 1: DATOS PERSONALES</h6>
+                        <div class="row g-3">
+                            <div class="col-md-7">
+                                <label class="form-label small fw-bold"><i class="bi bi-hash"></i> # de documento</label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Ingrese documento">
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label small fw-bold"><i class="bi bi-card-list"></i> Tipo</label>
+                                <select class="form-select form-select-sm">
+                                    <option>C.C</option>
+                                    <option>T.I</option>
+                                    <option>C.E</option>
+                                    <option>P.E</option>
+                                    <option>R.C</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold"><i class="bi bi-person"></i> Nombre completo</label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Nombres y apellidos">
+                            </div>
+                            <div class="col-md-7">
+                                <label class="form-label small fw-bold"><i class="bi bi-cake2"></i> Fecha de nacimiento</label>
+                                <input type="date" id="fechaNacimiento" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label small fw-bold"><i class="bi bi-calendar-event"></i> Edad actual</label>
+                                <input type="text" id="displayEdad" class="form-control form-control-sm fw-bold" placeholder="---" readonly style="background-color: #f0f7ff !important; color: #2D89EF !important; border: 1.5px solid #2D89EF !important;">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold"><i class="bi bi-gender-ambiguous"></i> Género</label>
+                                <select class="form-select form-select-sm">
+                                    <option>Masculino</option>
+                                    <option>Femenino</option>
+                                    <option>Otro</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold"><i class="bi bi-infinity"></i> Estado civil</label>
+                                <select class="form-select form-select-sm">
+                                    <option>Soltero(a)</option>
+                                    <option>Casado(a)</option>
+                                    <option>Divorciado(a)</option>
+                                    <option>Viudo(a)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <div class="form-section-card shadow-sm p-4">
+                                <h6 class="fw-bold border-bottom pb-2 mb-3">SECCIÓN 2: INFORMACIÓN DE CONTACTO</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6"><label class="form-label small fw-bold">Teléfono</label><input type="text" class="form-control form-control-sm"></div>
+                                    <div class="col-md-6"><label class="form-label small fw-bold">Correo electrónico</label><input type="email" class="form-control form-control-sm"></div>
+                                    <div class="col-12"><label class="form-label small fw-bold">Dirección</label><input type="text" class="form-control form-control-sm"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-section-card shadow-sm p-4">
+                                <h6 class="fw-bold border-bottom pb-2 mb-3">SECCIÓN 3: INFORMACIÓN MÉDICA</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6"><label class="form-label small fw-bold">Aseguradora</label>
+                                        <select class="form-select form-select-sm">
+                                            <option>EPS SURA</option>
+                                            <option>NUEVA EPS</option>
+                                            <option>SANITAS</option>
+                                            <option>PARTICULAR</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6"><label class="form-label small fw-bold">Tipo vinculación</label>
+                                        <select class="form-select form-select-sm">
+                                            <option>Cotizante</option>
+                                            <option>Beneficiario</option>
+                                            <option>Particular</option>
+                                            <option>Otro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-section-card shadow-sm p-4">
+                        <h6 class="fw-bold border-bottom pb-2 mb-3">SECCIÓN 4: CONTACTO DE EMERGENCIA</h6>
+                        <div class="row g-3">
+                            <div class="col-md-4"><label class="form-label small fw-bold">Nombre (E)</label><input type="text" class="form-control form-control-sm"></div>
+                            <div class="col-md-3"><label class="form-label small fw-bold">Cédula (E)</label><input type="text" class="form-control form-control-sm"></div>
+                            <div class="col-md-3"><label class="form-label small fw-bold">Teléfono (E)</label><input type="text" class="form-control form-control-sm"></div>
+                            <div class="col-md-2"><label class="form-label small fw-bold">Parentesco</label>
+                                <select class="form-select form-select-sm">
+                                    <option>Cónyuge</option>
+                                    <option>Padre/Madre</option>
+                                    <option>Hijo(a)</option>
+                                    <option>Hermano(a)</option>
+                                    <option>Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 d-flex justify-content-center mt-5 mb-5">
+                    <a href="orden_virtual.html" 
+                       style="background: linear-gradient(135deg, #2D89EF 0%, #1e5ab3 100%) !important; 
+                              color: white !important; 
+                              width: 80%; 
+                              max-width: 600px; 
+                              padding: 20px; 
+                              text-align: center; 
+                              text-decoration: none !important; 
+                              border-radius: 15px; 
+                              font-weight: bold; 
+                              font-size: 1.1rem; 
+                              display: block; 
+                              box-shadow: 0 10px 20px rgba(45,137,239,0.3);
+                              text-transform: uppercase;">
+                        <i class="bi bi-file-earmark-plus-fill me-2"></i> 
+                        FINALIZAR REGISTRO Y GENERAR ORDEN VIRTUAL
+                    </a>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orden Virtual - Sistema RADO</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style-dashboard.css">
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <p class="mb-0 fw-bold border-bottom pb-2 text-white">FACTURACIÓN RADO</p>
+            </div>
+            <ul class="nav flex-column mt-4">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-grid-fill"></i> PANEL DE CONTROL</a></li>
+                <li class="nav-item"><a href="registro_paciente.html" class="nav-link"><i class="bi bi-person-badge"></i> REGISTRO DE PACIENTE</a></li>
+                <li class="nav-item"><a href="orden_virtual.html" class="nav-link active"><i class="bi bi-file-earmark-medical"></i> ORDEN VIRTUAL</a></li>
+                <li class="nav-item"><a href="facturacion_electronica.html" class="nav-link"><i class="bi bi-receipt"></i> FACTURA ELECTRÓNICA</a></li>
+                <li class="nav-item"><a href="generar_reporte.html" class="nav-link"><i class="bi bi-bar-chart-line"></i> GENERAR REPORTE</a></li>
+                <li class="nav-item"><a href="gestion_usuarios.html" class="nav-link"><i class="bi bi-people"></i> GESTIÓN DE USUARIO</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="index.html" class="text-white text-decoration-none small"><i class="bi bi-box-arrow-left"></i> SALIR DEL SISTEMA</a>
+            </div>
+        </nav>
+
+        <main class="content-area">
+            <header class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <h2 class="fw-bold mb-0 h4 text-dark">ORDEN VIRTUAL</h2>
+                <div class="header-actions">
+                    <button class="btn btn-outline-secondary btn-sm me-2 fw-bold"><i class="bi bi-pencil"></i> Editar</button>
+                    <button class="btn btn-primary btn-sm me-2 fw-bold"><i class="bi bi-send"></i> Enviar</button>
+                    <button class="btn btn-outline-dark btn-sm fw-bold"><i class="bi bi-upload"></i> Cargar</button>
+                </div>
+            </header>
+
+            <form class="pb-5" style="max-width: 1000px;">
+                
+                <div class="form-section-card shadow-sm p-4 mb-4">
+                    <h6 class="fw-bold text-primary mb-4"><i class="bi bi-person me-2"></i> Datos del Paciente</h6>
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-muted">Nombre Completo *</label>
+                            <input type="text" class="form-control form-control-sm bg-light text-muted" value="Ingrese nombre completo del paciente" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">Número de Documento *</label>
+                            <input type="text" class="form-control form-control-sm bg-light text-muted" value="Ej: 12345678" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">Sexo *</label>
+                            <input type="text" class="form-control form-control-sm bg-light text-muted" value="Seleccione" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold text-muted">Fecha de Nacimiento *</label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-light"><i class="bi bi-calendar3"></i></span>
+                                <input type="text" class="form-control bg-light text-muted" value="dd/mm/aaaa" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small fw-bold text-muted">Edad</label>
+                            <div class="d-flex align-items-center">
+                                <input type="text" class="form-control form-control-sm bg-light text-muted w-50 me-2" value="0" readonly>
+                                <span class="small text-muted">años</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section-card shadow-sm p-4 mb-4">
+                    <h6 class="fw-bold text-primary mb-4"><i class="bi bi-file-earmark-text me-2"></i> Información del Servicio</h6>
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-dark">Estudio a Realizar *</label>
+                            <div class="input-group input-group-sm mb-2">
+                                <input type="text" id="inputEstudio" class="form-control" placeholder="Escriba el tipo de estudio a realizar">
+                                <button class="btn btn-primary px-3 fw-bold" type="button" id="btnAgregarEstudio">
+                                    <i class="bi bi-plus-lg"></i> Agregar
+                                </button>
+                            </div>
+                            
+                            <div id="contenedorEstudios" class="p-2 border rounded bg-light d-flex flex-wrap align-items-center" style="min-height: 50px; gap: 8px;">
+                                <span id="textoPlaceholder" class="text-muted small fst-italic w-100 text-center">Los estudios agregados aparecerán aquí...</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark">Odontólogo Remitente *</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="Nombre del odontólogo">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark">Correo Electrónico *</label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input type="email" class="form-control" placeholder="ejemplo@correo.com">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section-card shadow-sm p-4 mb-4">
+                    <h6 class="fw-bold text-primary mb-4"><i class="bi bi-box-seam me-2"></i> Detalles de Entrega</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-dark">Formato de Entrega *</label>
+                            <select class="form-select form-select-sm">
+                                <option value="" selected disabled>Seleccione formato</option>
+                                <option value="fisico">FÍSICO</option>
+                                <option value="virtual">VIRTUAL</option>
+                                <option value="fisico_virtual">FÍSICO/VIRTUAL</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button" class="btn btn-light border px-4 py-2 me-3 fw-bold text-muted">Cancelar</button>
+                    <button type="submit" class="btn btn-primary px-5 py-2 fw-bold shadow-sm">Guardar Orden</button>
+                </div>
+
+            </form>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+<script src="js/main.js"></script>

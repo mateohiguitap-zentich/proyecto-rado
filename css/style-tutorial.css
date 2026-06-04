@@ -1,0 +1,172 @@
+/* ==============================================================
+   ESTILOS PARA EL TUTORIAL / MANUAL DE USUARIO RADO
+   ============================================================== */
+
+/* Reset básico y configuración general */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Efecto de desplazamiento suave al hacer clic en el índice */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f1f5f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* ==============================================================
+   ENCABEZADO
+   ============================================================== */
+.header {
+    background: linear-gradient(135deg, #2D89EF 0%, #1e5ab3 100%);
+    color: white;
+    padding: 60px 20px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.header .subtitle {
+    font-size: 1.2rem;
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+/* ==============================================================
+   SECCIÓN DE INTRODUCCIÓN E ÍNDICE
+   ============================================================== */
+.intro-section {
+    margin-bottom: 50px;
+}
+
+.intro-text {
+    font-size: 1.1rem;
+    text-align: center;
+    color: #475569;
+    margin-bottom: 30px;
+}
+
+.indice-card {
+    background-color: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border-top: 5px solid #2D89EF;
+}
+
+.indice-card h2 {
+    color: #2D89EF;
+    margin-bottom: 10px;
+}
+
+/* Estilos para la Lista Ordenada (<ol>) */
+.indice-lista {
+    margin-top: 20px;
+    padding-left: 20px;
+}
+
+.indice-lista li {
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.indice-lista a {
+    color: #475569;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.indice-lista a:hover {
+    color: #2D89EF;
+    text-decoration: underline;
+}
+
+/* ==============================================================
+   TARJETAS DE LOS MÓDULOS (TEMAS)
+   ============================================================== */
+.modulo-card {
+    background-color: white;
+    border-radius: 15px;
+    padding: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    /* Ajuste para que al hacer clic en el índice, el título no quede pegado arriba */
+    scroll-margin-top: 40px; 
+}
+
+.modulo-card h2 {
+    color: #1e293b;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+.img-container {
+    width: 100%;
+    margin-bottom: 30px;
+    text-align: center;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.img-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.descripcion p {
+    margin-bottom: 15px;
+    color: #475569;
+    font-size: 1.05rem;
+}
+
+.descripcion ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+    color: #475569;
+}
+
+.descripcion li {
+    margin-bottom: 10px;
+}
+
+/* ==============================================================
+   PIE DE PÁGINA
+   ============================================================== */
+.footer {
+    background-color: #1e293b;
+    color: white;
+    padding: 30px;
+    margin-top: 50px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}

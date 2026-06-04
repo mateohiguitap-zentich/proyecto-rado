@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema RADO</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <link rel="stylesheet" href="css/style-dashboard.css">
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <p class="mb-0 fw-bold border-bottom pb-2">FACTURACIÓN RADO</p>
+            </div>
+            
+            <ul class="nav flex-column mt-4">
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link active"><i class="bi bi-grid-fill"></i> PANEL DE CONTROL</a>
+                </li>
+                <li class="nav-item">
+                    <a href="registro_paciente.html" class="nav-link"><i class="bi bi-person-badge"></i> REGISTRO DE PACIENTE</a>
+                </li>
+                <li class="nav-item">
+                    <a href="orden_virtual.html" class="nav-link"><i class="bi bi-file-earmark-medical"></i> ORDEN VIRTUAL</a>
+                </li>
+                <li class="nav-item">
+                    <a href="facturacion_electronica.html" class="nav-link"><i class="bi bi-receipt"></i> FACTURA ELECTRÓNICA</a>
+                </li>
+                <li class="nav-item">
+                    <a href="generar_reporte.html" class="nav-link"><i class="bi bi-bar-chart-line"></i> GENERAR REPORTE</a>
+                </li>
+                <li class="nav-item">
+                    <a href="gestion_usuarios.html" class="nav-link"><i class="bi bi-people"></i> GESTIÓN DE USUARIO</a>
+                </li>
+                <li class="nav-item mt-4">
+                    <a href="tutorial.html" target="_blank" class="nav-link" style="color: #fbbf24 !important; border: 1px dashed #fbbf24;">
+                        <i class="bi bi-question-circle"></i> MANUAL DE AYUDA
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <a href="index.html" class="text-white text-decoration-none small">
+                    <i class="bi bi-box-arrow-left"></i> SALIR DEL SISTEMA
+                </a>
+            </div>
+        </nav>
+
+        <main class="content-area">
+            <header class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-0">Bienvenido al Panel de Control</h2>
+                    <p class="text-muted small">Jueves, 26 de marzo de 2026 - Resumen del día</p>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-link text-decoration-none dropdown-toggle p-0 fw-bold text-dark" type="button" id="dropdownSedes" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 14px;">
+                        SEDE: <span id="sedeActual" class="text-primary">RADO OBELISCO</span>
+                    </button>
+                    <ul class="dropdown-menu shadow border-0 rounded-3 mt-2" aria-labelledby="dropdownSedes">
+                        <li><h6 class="dropdown-header small text-muted">Seleccionar Sede</h6></li>
+                        <li><a class="dropdown-item small py-2" href="#"><i class="bi bi-geo-alt me-2"></i> RADO OBELISCO</a></li>
+                        <li><a class="dropdown-item small py-2" href="#"><i class="bi bi-geo-alt me-2"></i> RADO CENTRO</a></li>
+                        <li><a class="dropdown-item small py-2" href="#"><i class="bi bi-geo-alt me-2"></i> RADO BELLO</a></li>
+                    </ul>
+                </div>
+            </header>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p class="text-muted small mb-1">Total de Pacientes Atendidos</p>
+                                <h3 class="fw-bold">1,284</h3>
+                                <span class="badge-up"><i class="bi bi-arrow-up-short"></i> +12% vs. anterior</span>
+                            </div>
+                            <div class="stat-icon blue"><i class="bi bi-people"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p class="text-muted small mb-1">Pacientes Atendidos Hoy</p>
+                                <h3 class="fw-bold">58</h3>
+                                <span class="badge-up"><i class="bi bi-arrow-up-short"></i> +8% vs. anterior</span>
+                            </div>
+                            <div class="stat-icon gray"><i class="bi bi-person-check"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p class="text-muted small mb-1">Facturación del Día</p>
+                                <h3 class="fw-bold">$ 2.258.000</h3>
+                                <span class="badge-down"><i class="bi bi-arrow-down-short"></i> -3% vs. anterior</span>
+                            </div>
+                            <div class="stat-icon purple"><i class="bi bi-currency-dollar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="chart-container shadow-sm p-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h6 class="fw-bold">Pacientes Atendidos <br><small class="text-muted fw-normal">Últimos 8 días</small></h6>
+                            <span class="text-success small fw-bold">+ 8.5%</span>
+                        </div>
+                        <div class="svg-chart-wrapper">
+                            <svg viewBox="0 0 500 150" class="w-100 h-100">
+                                <path d="M0,120 Q50,110 100,50 T200,80 T300,30 T400,90 T500,20" fill="none" stroke="#2D89EF" stroke-width="4" />
+                                <path d="M0,120 Q50,110 100,50 T200,80 T300,30 T400,90 T500,20 V150 H0 Z" fill="rgba(45,137,239,0.1)" />
+                            </svg>
+                        </div>
+                        <div class="d-flex justify-content-between mt-3 text-muted small px-2">
+                            <span>Lun 18</span><span>Mar 19</span><span>Mié 20</span><span>Jue 21</span><span>Vie 22</span><span>Sáb 23</span><span>Dom 24</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="activity-container shadow-sm p-4">
+                        <h6 class="fw-bold mb-4"><i class="bi bi-clock-history"></i> Actividad Reciente</h6>
+                        
+                        <div class="activity-list">
+                            <div class="activity-item d-flex align-items-center justify-content-between mb-4">
+                                <div class="d-flex align-items-center">
+                                    <img src="https://placehold.co/40x40" class="rounded-circle me-3">
+                                    <div>
+                                        <p class="mb-0 fw-bold small">Maria Gonzalez</p>
+                                        <p class="mb-0 text-muted smaller">Periapical Individual</p>
+                                    </div>
+                                </div>
+                                <span class="text-success fw-bold small">$ 22.000</span>
+                            </div>
+
+                            <div class="activity-item d-flex align-items-center justify-content-between mb-4">
+                                <div class="d-flex align-items-center">
+                                    <img src="https://placehold.co/40x40" class="rounded-circle me-3">
+                                    <div>
+                                        <p class="mb-0 fw-bold small">Carlos Rodriguez</p>
+                                        <p class="mb-0 text-muted smaller">Panorámica</p>
+                                    </div>
+                                </div>
+                                <span class="text-success fw-bold small">$ 32.000</span>
+                            </div>
+
+                            <div class="activity-item d-flex align-items-center justify-content-between mb-4">
+                                <div class="d-flex align-items-center">
+                                    <img src="https://placehold.co/40x40" class="rounded-circle me-3">
+                                    <div>
+                                        <p class="mb-0 fw-bold small">Ana Martinez</p>
+                                        <p class="mb-0 text-muted smaller">Tomografía</p>
+                                    </div>
+                                </div>
+                                <span class="text-success fw-bold small">$ 170.000</span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-outline-primary btn-sm w-100 mt-2">Ver todo el historial</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

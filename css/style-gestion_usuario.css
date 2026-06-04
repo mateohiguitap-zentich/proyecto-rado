@@ -1,0 +1,47 @@
+/* --- ESTILOS ESPECÍFICOS PARA GESTIÓN DE USUARIOS --- */
+.custom-tabs {
+    border-bottom: 2px solid #e9ecef;
+    margin-bottom: 0;
+}
+
+.custom-tabs .nav-link {
+    color: #6c757d;
+    font-weight: 500;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 12px 20px;
+    background: transparent;
+    border-radius: 0;
+    transition: all 0.3s;
+}
+
+.custom-tabs .nav-link:hover {
+    color: #2D89EF;
+}
+
+.custom-tabs .nav-link.active {
+    color: #2D89EF;
+    border-color: #2D89EF;
+}
+
+.custom-tabs .nav-link.text-danger.active {
+    color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.form-control.bg-light, .form-select.bg-light, .input-group-text.bg-light {
+    border: 1px solid #e2e8f0;
+    padding: 12px 15px;
+    color: #475569;
+}
+
+.form-control.bg-light:focus {
+    background-color: white !important;
+    border-color: #2D89EF;
+    box-shadow: 0 0 0 0.2rem rgba(45, 137, 239, 0.1);
+}
+
+.input-group-text.bg-light { border-right: none; }
+.form-control.bg-light { border-left: none; }
+
+#contenidoPrincipal { transition: filter 0.5s ease; }

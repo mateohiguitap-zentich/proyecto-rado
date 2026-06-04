@@ -1,0 +1,114 @@
+/* Configuración General */
+body {
+    background-color: #f1f5f9;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+.main-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR (Barra Lateral) */
+.sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, #2D89EF 0%, #1e5ab3 100%);
+    color: white;
+    padding: 30px 15px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+}
+
+.sidebar-header {
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    transition: all 0.3s;
+}
+
+.nav-link i {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: white;
+    color: #2D89EF;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    text-align: center;
+}
+
+/* ÁREA DE CONTENIDO */
+.content-area {
+    flex-grow: 1;
+    margin-left: 260px; /* Espacio para la sidebar fixed */
+    padding: 40px;
+}
+
+/* TARJETAS DE ESTADÍSTICAS */
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.stat-icon.blue { background-color: #e3f2fd; color: #2D89EF; }
+.stat-icon.gray { background-color: #f8f9fa; color: #6c757d; }
+.stat-icon.purple { background-color: #f3e5f5; color: #9c27b0; }
+
+.badge-up { color: #22c55e; font-size: 11px; font-weight: bold; }
+.badge-down { color: #ef4444; font-size: 11px; font-weight: bold; }
+
+/* GRÁFICO Y ACTIVIDAD */
+.chart-container, .activity-container {
+    background: white;
+    border-radius: 25px;
+    height: 100%;
+}
+
+.svg-chart-wrapper {
+    height: 180px;
+    margin-top: 20px;
+}
+
+.smaller {
+    font-size: 11px;
+}
+
+.activity-item img {
+    border: 2px solid #f1f5f9;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 992px) {
+    .sidebar { width: 80px; }
+    .sidebar-header p, .nav-link span, .sidebar-footer span { display: none; }
+    .content-area { margin-left: 80px; }
+}

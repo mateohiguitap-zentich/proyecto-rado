@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturación Electrónica - Sistema RADO</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style-dashboard.css">
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <p class="mb-0 fw-bold border-bottom pb-2 text-white">FACTURACIÓN RADO</p>
+            </div>
+            <ul class="nav flex-column mt-4">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-grid-fill"></i> PANEL DE CONTROL</a></li>
+                <li class="nav-item"><a href="registro_paciente.html" class="nav-link"><i class="bi bi-person-badge"></i> REGISTRO DE PACIENTE</a></li>
+                <li class="nav-item"><a href="orden_virtual.html" class="nav-link"><i class="bi bi-file-earmark-medical"></i>ORDEN VIRTUAL</a></li>
+                <li class="nav-item"><a href="facturacion_electronica.html" class="nav-link active"><i class="bi bi-receipt"></i> FACTURA ELECTRÓNICA</a></li>
+                <li class="nav-item"><a href="generar_reporte.html" class="nav-link"><i class="bi bi-bar-chart-line"></i> GENERAR REPORTE</a></li>
+                <li class="nav-item"><a href="gestion_usuarios.html" class="nav-link"><i class="bi bi-people"></i> GESTIÓN DE USUARIO</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="index.html" class="text-white text-decoration-none small"><i class="bi bi-box-arrow-left"></i> SALIR DEL SISTEMA</a>
+            </div>
+        </nav>
+
+        <main class="content-area">
+            <header class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <div>
+                    <h2 class="fw-bold mb-0 h4 text-dark">Facturación Electrónica</h2>
+                    <p class="text-muted small mb-0">Gestión de facturas y pagos de pacientes</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-success btn-sm me-2 shadow-sm fw-bold"><i class="bi bi-floppy"></i> Guardar</button>
+                    <button class="btn btn-outline-primary btn-sm me-2 fw-bold bg-white"><i class="bi bi-pencil-square"></i> Editar</button>
+                    <button class="btn btn-outline-primary btn-sm me-2 fw-bold bg-white"><i class="bi bi-send"></i> Enviar</button>
+                    <button class="btn btn-outline-secondary btn-sm fw-bold bg-white"><i class="bi bi-upload"></i> Cargar</button>
+                </div>
+            </header>
+
+            <div class="row g-4 pb-5">
+                <div class="col-lg-8">
+                    
+                    <div class="form-section-card shadow-sm p-4 mb-4">
+                        <h6 class="fw-bold text-primary mb-3"><i class="bi bi-file-earmark-text me-2"></i> Información de Factura</h6>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-muted"># Número de Factura</label>
+                                <input type="text" class="form-control form-control-sm bg-light fw-bold text-danger" value="0001234" readonly>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label small fw-bold text-muted"><i class="bi bi-person"></i> Nombre Completo del Paciente</label>
+                                <input type="text" class="form-control form-control-sm bg-light" value="Maria Gonzalez Perez" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-muted">Número de Documento</label>
+                                <input type="text" class="form-control form-control-sm bg-light" value="1234567890" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-muted"><i class="bi bi-map"></i> Departamento</label>
+                                <input type="text" class="form-control form-control-sm bg-light" value="Antioquia" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-muted"><i class="bi bi-geo-alt"></i> Ciudad</label>
+                                <input type="text" class="form-control form-control-sm bg-light" value="Medellín" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section-card shadow-sm p-4 mb-4">
+                        <h6 class="fw-bold text-primary mb-3"><i class="bi bi-telephone me-2"></i> Información de Contacto</h6>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-muted"><i class="bi bi-geo-alt"></i> Dirección</label>
+                                <input type="text" class="form-control form-control-sm bg-light" value="Calle, carrera, número" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted"><i class="bi bi-telephone"></i> Teléfono</label>
+                                <input type="text" class="form-control form-control-sm bg-light" value="3001234567" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted"><i class="bi bi-envelope"></i> Correo Electrónico</label>
+                                <input type="email" class="form-control form-control-sm bg-light" value="paciente@email.com" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section-card shadow-sm p-4">
+                        <h6 class="fw-bold text-primary mb-3"><i class="bi bi-credit-card me-2"></i> Información de Facturación</h6>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-muted">Estudio a Realizar</label>
+                                <input type="text" class="form-control form-control-sm bg-light" value="Radiografía Panorámica" readonly>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-dark">Valor a Pagar *</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-white fw-bold text-muted">$</span>
+                                    <input type="number" class="form-control fw-bold" placeholder="0.00" style="font-size: 1.1rem; color: #2D89EF;">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-dark">Método de Pago *</label>
+                                <select class="form-select form-select-sm fw-bold">
+                                    <option value="" selected disabled>Seleccione método</option>
+                                    <option value="efectivo">EFECTIVO</option>
+                                    <option value="consignacion">CONSIGNACIÓN/TRANSFERENCIA</option>
+                                    <option value="debito">TARJETA DÉBITO</option>
+                                    <option value="credito">TARJETA CRÉDITO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="clinica-card shadow-sm h-100">
+                        <div class="clinica-header d-flex align-items-center">
+                            <i class="bi bi-building fs-4 me-2"></i>
+                            <h6 class="mb-0 fw-bold">Información de la Clínica</h6>
+                        </div>
+                        <div class="clinica-body">
+                            <div class="mb-3">
+                                <small class="text-muted d-block fw-bold" style="font-size: 0.7rem;">RAZÓN SOCIAL</small>
+                                <span class="fw-bold text-dark" style="font-size: 0.9rem;">Clínica Integral RADO S.A.S</span>
+                            </div>
+                            <div class="mb-3">
+                                <small class="text-muted d-block fw-bold" style="font-size: 0.7rem;">NIT</small>
+                                <span class="fw-bold text-dark" style="font-size: 0.9rem;">900.123.456-7</span>
+                            </div>
+                            <div class="mb-3">
+                                <small class="text-muted d-block fw-bold" style="font-size: 0.7rem;">NÚMERO DE SEDE</small>
+                                <span class="fw-bold text-dark" style="font-size: 0.9rem;">Sede #001 - Obelisco</span>
+                            </div>
+                            <div class="mb-3">
+                                <small class="text-muted d-block fw-bold" style="font-size: 0.7rem;">DIRECCIÓN DE LA SEDE</small>
+                                <span class="fw-bold text-dark" style="font-size: 0.9rem;">Carrera 74 # 48-37 Local 101<br>Medellín, Colombia</span>
+                            </div>
+                            <div class="mb-4">
+                                <small class="text-muted d-block fw-bold" style="font-size: 0.7rem;">CONTACTO</small>
+                                <span class="fw-bold text-dark" style="font-size: 0.9rem;">Tel: (604) 234-5678<br>facturacion@radoclinica.com</span>
+                            </div>
+                            
+                            <div class="dian-footer mt-auto text-center border-top pt-3">
+                                <small class="text-muted" style="font-size: 0.7rem;">
+                                    Factura Electrónica DIAN<br>
+                                    Resolución N° 18764005551234
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

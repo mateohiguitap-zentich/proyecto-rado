@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Sistema RADO</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style-dashboard.css">
+</head>
+<body class="bg-light">
+
+    <div class="modal fade" id="modalSeguridad" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-header bg-primary text-white" style="border-radius: 20px 20px 0 0;">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-shield-lock-fill me-2"></i> Acceso Restringido</h5>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <p class="text-muted mb-4">Esta sección requiere privilegios de Administrador. Por favor, ingrese su clave maestra para continuar.</p>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-white"><i class="bi bi-key text-primary"></i></span>
+                        <input type="password" id="claveAdmin" class="form-control" placeholder="Clave de Administrador (ej: admin123)">
+                    </div>
+                    <div id="errorClave" class="text-danger small fw-bold mb-3" style="display: none;">Clave incorrecta. Intente de nuevo.</div>
+                    <button class="btn btn-primary w-100 fw-bold py-2" id="btnVerificarClave">Verificar Acceso</button>
+                    <a href="dashboard.html" class="btn btn-light w-100 mt-2 text-muted fw-bold">Volver al Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-header bg-danger text-white" style="border-radius: 20px 20px 0 0;">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i> Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <p class="text-muted mb-4">Está a punto de eliminar un usuario del sistema RADO. Esta acción no se puede deshacer. <strong>Ingrese su clave de administrador para confirmar.</strong></p>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-white"><i class="bi bi-key text-danger"></i></span>
+                        <input type="password" id="claveEliminar" class="form-control" placeholder="Clave de Administrador">
+                    </div>
+                    <div id="errorClaveEliminar" class="text-danger small fw-bold mb-3" style="display: none;">Clave incorrecta. Intente de nuevo.</div>
+                    <button class="btn btn-danger w-100 fw-bold py-2" id="btnConfirmarEliminacion"><i class="bi bi-trash3 me-2"></i> Eliminar Definitivamente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-wrapper" id="contenidoPrincipal" style="display: none; filter: blur(5px);">
+        
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <p class="mb-0 fw-bold border-bottom pb-2 text-white">FACTURACIÓN RADO</p>
+            </div>
+            <ul class="nav flex-column mt-4">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-grid-fill"></i> PANEL DE CONTROL</a></li>
+                <li class="nav-item"><a href="registro_paciente.html" class="nav-link"><i class="bi bi-person-badge"></i> REGISTRO DE PACIENTE</a></li>
+                <li class="nav-item"><a href="orden_virtual.html" class="nav-link"><i class="bi bi-file-earmark-medical"></i> ORDEN VIRTUAL</a></li>
+                <li class="nav-item"><a href="facturacion_electronica.html" class="nav-link"><i class="bi bi-receipt"></i> FACTURA ELECTRÓNICA</a></li>
+                <li class="nav-item"><a href="reportes.html" class="nav-link"><i class="bi bi-bar-chart-line"></i> GENERAR REPORTE</a></li>
+                <li class="nav-item"><a href="gestion_usuarios.html" class="nav-link active"><i class="bi bi-people"></i> GESTIÓN DE USUARIO</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="index.html" class="text-white text-decoration-none small"><i class="bi bi-box-arrow-left"></i> SALIR DEL SISTEMA</a>
+            </div>
+        </nav>
+
+        <main class="content-area">
+            <header class="mb-4">
+                <h2 class="fw-bold h4 text-dark">Gestión de Usuarios</h2>
+            </header>
+
+            <ul class="nav nav-tabs custom-tabs" id="userTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" style="color: #2D89EF !important; font-weight: bold; background: transparent;" data-bs-toggle="tab" data-bs-target="#registrar" type="button" role="tab">Registrar Usuario</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" style="color: #475569 !important; font-weight: bold; background: transparent;" data-bs-toggle="tab" data-bs-target="#editar" type="button" role="tab">Editar Usuario</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link text-danger" style="color: #dc3545 !important; font-weight: bold; background: transparent;" data-bs-toggle="tab" data-bs-target="#eliminar" type="button" role="tab">Eliminar Usuario</button>
+                </li>
+            </ul>
+
+            <div class="tab-content bg-white p-4 p-md-5 rounded-bottom shadow-sm border border-top-0" id="userTabsContent" style="max-width: 800px;">
+                
+                <div class="tab-pane fade show active" id="registrar" role="tabpanel">
+                    <form class="row g-4">
+                        <div class="col-12">
+                            <label class="form-label small text-muted fw-bold">Número de documento</label>
+                            <div class="input-group shadow-sm">
+                                <span class="input-group-text bg-light"><i class="bi bi-file-earmark-text text-muted"></i></span>
+                                <input type="text" class="form-control bg-light" placeholder="Ingrese el número de documento">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small text-muted fw-bold">Nueva clave</label>
+                            <div class="input-group shadow-sm">
+                                <span class="input-group-text bg-light"><i class="bi bi-lock text-muted"></i></span>
+                                <input type="password" class="form-control bg-light input-clave" placeholder="Ingrese la nueva clave">
+                                <span class="input-group-text bg-light toggle-password" style="cursor: pointer;"><i class="bi bi-eye text-muted"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small text-muted fw-bold">Confirmar clave</label>
+                            <div class="input-group shadow-sm">
+                                <span class="input-group-text bg-light"><i class="bi bi-lock text-muted"></i></span>
+                                <input type="password" class="form-control bg-light input-clave" placeholder="Confirme la clave">
+                                <span class="input-group-text bg-light toggle-password" style="cursor: pointer;"><i class="bi bi-eye text-muted"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small text-muted fw-bold">Asignar rol</label>
+                            <div class="input-group shadow-sm">
+                                <span class="input-group-text bg-light"><i class="bi bi-person text-muted"></i></span>
+                                <select class="form-select bg-light text-muted">
+                                    <option value="" selected disabled>Seleccione un rol</option>
+                                    <option value="admin">Administrador</option>
+                                    <option value="odontologo">Técnico RX</option>
+                                    <option value="recepcion">Recepcionista / Cajero</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-between mt-5">
+                            <button type="button" class="btn btn-primary w-50 me-2 py-2 fw-bold shadow-sm">Guardar</button>
+                            <button type="button" class="btn btn-secondary w-50 ms-2 py-2 fw-bold shadow-sm">Salir</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="editar" role="tabpanel">
+                    <form class="row g-4">
+                        <div class="col-12">
+                            <label class="form-label small text-primary fw-bold"><i class="bi bi-search me-1"></i> Buscar Usuario a Editar</label>
+                            <div class="input-group shadow-sm border border-primary rounded">
+                                <span class="input-group-text bg-white border-0"><i class="bi bi-search text-primary"></i></span>
+                                <input type="text" class="form-control border-0" placeholder="Ingrese el documento a buscar...">
+                                <button class="btn btn-primary px-4 fw-bold" type="button">Buscar</button>
+                            </div>
+                        </div>
+                        <hr class="mt-4 text-muted">
+                        <div class="col-12">
+                            <label class="form-label small text-muted fw-bold">Actualizar clave</label>
+                            <div class="input-group shadow-sm">
+                                <span class="input-group-text bg-light"><i class="bi bi-lock text-muted"></i></span>
+                                <input type="password" class="form-control bg-light input-clave" placeholder="Ingrese la nueva clave">
+                                <span class="input-group-text bg-light toggle-password" style="cursor: pointer;"><i class="bi bi-eye text-muted"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small text-muted fw-bold">Confirmar clave actualizada</label>
+                            <div class="input-group shadow-sm">
+                                <span class="input-group-text bg-light"><i class="bi bi-lock text-muted"></i></span>
+                                <input type="password" class="form-control bg-light input-clave" placeholder="Confirme la clave">
+                                <span class="input-group-text bg-light toggle-password" style="cursor: pointer;"><i class="bi bi-eye text-muted"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small text-muted fw-bold">Actualizar rol</label>
+                            <div class="input-group shadow-sm">
+                                <span class="input-group-text bg-light"><i class="bi bi-person text-muted"></i></span>
+                                <select class="form-select bg-light text-muted">
+                                    <option value="" selected disabled>Seleccione un rol</option>
+                                    <option value="admin">Administrador</option>
+                                    <option value="odontologo">Técnico RX</option>
+                                    <option value="recepcion">Recepcionista / Cajero</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-between mt-5">
+                            <button type="button" class="btn btn-primary w-50 me-2 py-2 fw-bold shadow-sm">Actualizar Datos</button>
+                            <button type="button" class="btn btn-secondary w-50 ms-2 py-2 fw-bold shadow-sm">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="eliminar" role="tabpanel">
+                    <form class="row g-4">
+                        <div class="col-12">
+                            <div class="alert alert-success d-none" id="alertaEliminado" role="alert">
+                                <i class="bi bi-check-circle-fill me-2"></i> ¡Usuario eliminado con éxito del sistema RADO!
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small text-danger fw-bold"><i class="bi bi-search me-1"></i> Buscar Usuario a Eliminar</label>
+                            <div class="input-group shadow-sm border border-danger rounded">
+                                <span class="input-group-text bg-white border-0"><i class="bi bi-search text-danger"></i></span>
+                                <input type="text" class="form-control border-0" id="inputDocumentoEliminar" placeholder="Ingrese el documento a buscar...">
+                                <button class="btn btn-outline-danger px-4 fw-bold border-0 border-start" type="button">Buscar</button>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 text-center mt-5">
+                            <button type="button" class="btn btn-danger w-75 py-3 fw-bold shadow-sm fs-5" id="btnPedirClaveEliminar">
+                                <i class="bi bi-trash3 me-2"></i> Eliminar Usuario
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // --- 1. MODAL DE ACCESO INICIAL ---
+        const modalSeguridad = new bootstrap.Modal(document.getElementById('modalSeguridad'));
+        modalSeguridad.show();
+
+        const btnVerificar = document.getElementById('btnVerificarClave');
+        const inputClave = document.getElementById('claveAdmin');
+        const errorClave = document.getElementById('errorClave');
+        const contenido = document.getElementById('contenidoPrincipal');
+
+        btnVerificar.addEventListener('click', function() {
+            if (inputClave.value === 'admin123') {
+                modalSeguridad.hide();
+                contenido.style.display = 'block';
+                contenido.style.filter = 'none';
+            } else {
+                errorClave.style.display = 'block';
+                inputClave.classList.add('is-invalid');
+            }
+        });
+
+        inputClave.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') btnVerificar.click();
+        });
+
+        // --- 2. LÓGICA PARA MOSTRAR CONTRASEÑAS ---
+        const togglePasswords = document.querySelectorAll('.toggle-password');
+        togglePasswords.forEach(icon => {
+            icon.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                const iconShape = this.querySelector('i');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    iconShape.classList.replace('bi-eye', 'bi-eye-slash');
+                } else {
+                    input.type = 'password';
+                    iconShape.classList.replace('bi-eye-slash', 'bi-eye');
+                }
+            });
+        });
+
+        // --- 3. LÓGICA DEL MODAL DE ELIMINACIÓN ---
+        const modalEliminar = new bootstrap.Modal(document.getElementById('modalEliminar'));
+        const btnPedirClaveEliminar = document.getElementById('btnPedirClaveEliminar');
+        const btnConfirmarEliminacion = document.getElementById('btnConfirmarEliminacion');
+        const inputClaveEliminar = document.getElementById('claveEliminar');
+        const errorClaveEliminar = document.getElementById('errorClaveEliminar');
+        const alertaEliminado = document.getElementById('alertaEliminado');
+        const inputDocumentoEliminar = document.getElementById('inputDocumentoEliminar');
+
+        btnPedirClaveEliminar.addEventListener('click', function() {
+            inputClaveEliminar.value = ''; 
+            errorClaveEliminar.style.display = 'none';
+            inputClaveEliminar.classList.remove('is-invalid');
+            modalEliminar.show();
+        });
+
+        btnConfirmarEliminacion.addEventListener('click', function() {
+            if (inputClaveEliminar.value === 'admin123') {
+                modalEliminar.hide(); 
+                alertaEliminado.classList.remove('d-none'); 
+                inputDocumentoEliminar.value = ''; 
+                
+                setTimeout(() => {
+                    alertaEliminado.classList.add('d-none');
+                }, 4000);
+            } else {
+                errorClaveEliminar.style.display = 'block';
+                inputClaveEliminar.classList.add('is-invalid');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
+
+<script src="js/main.js"></script>

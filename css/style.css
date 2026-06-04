@@ -1,0 +1,174 @@
+/* Importación de fuente */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+body {
+    background-color: #f4f4f9;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Contenedor Principal */
+.login-card {
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    max-width: 1100px;
+    width: 95%;
+    margin: 20px;
+    min-height: 600px; /* Para asegurar que ambas columnas tengan buena altura */
+}
+
+/* Sección Izquierda: Formulario */
+.login-form-section {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.logo-container img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #f0f0ff;
+}
+
+.system-title {
+    color: #333;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.system-subtitle {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* Inputs Personalizados: Fondo sólido y bordes elegantes */
+.input-group-custom {
+    background-color: #E8E8FF; /* Morado/Azul claro muy sutil */
+    border-radius: 12px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #D1D1F0; /* Borde sutil para resaltar */
+}
+
+.input-group-custom i {
+    color: #2D89EF;
+    margin-right: 15px;
+    font-size: 18px;
+}
+
+.input-group-custom input {
+    background: transparent;
+    border: none;
+    width: 100%;
+    outline: none;
+    color: #333;
+}
+
+/* Botón Centrado */
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.btn-acceder {
+    background: linear-gradient(134deg, #2D89EF 0%, #1e5ab3 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 60px;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 8px 15px rgba(45, 137, 239, 0.3);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-acceder:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 20px rgba(45, 137, 239, 0.4);
+    color: white;
+}
+
+/* Sección Derecha: Fondo Azul con patrón de ondas */
+.login-image-section {
+    background-color: #2D89EF;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 25%),
+        linear-gradient(135deg, #2D89EF 0%, #1e5ab3 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    min-height: 650px;
+}
+
+/* El recuadro blanco que envuelve la foto de los odontólogos */
+.odontologos-frame {
+    width: 85%;
+    height: 75%;
+    background-color: rgba(255, 255, 255, 0.356);
+    padding: 0px;
+    border-radius: 30px;
+    box-shadow: 0 20px 40px rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* La imagen dentro del recuadro */
+.odontologos-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 30px;
+}
+
+.odontologos-frame img {
+    /* ... tus otras propiedades ... */
+    
+    /* ESTO ES EL TRUCO: */
+    /* Hace que el color blanco desaparezca y se "fusione" con el azul de atrás */
+    mix-blend-mode: multiply; 
+}
+
+.footer-text {
+    font-size: 11px;
+    color: #999;
+    margin-top: 30px;
+    text-align: center;
+}
+
+/* Responsividad para pantallas de celular */
+@media (max-width: 768px) {
+    .login-image-section {
+        display: none; /* Oculta la imagen en móviles para que se vea solo el formulario */
+    }
+    .login-form-section {
+        padding: 30px;
+    }
+}

@@ -1,0 +1,36 @@
+/* --- ESTILOS ESPECÍFICOS PARA REPORTES --- */
+
+/* Botón Exportar Excel */
+.btn-outline-success {
+    color: #198754;
+    border-color: #198754;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    background-color: #198754;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(25, 135, 84, 0.2) !important;
+}
+
+/* Icono cabecera Reportes */
+header .bg-primary {
+    background: linear-gradient(135deg, #2D89EF 0%, #1e5ab3 100%) !important;
+}
+
+/* Ajustes de la tabla de previsualización */
+.table-responsive {
+    border: 1px solid #e9ecef;
+}
+
+.table th {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 15px;
+}
+
+.table td {
+    padding: 15px;
+    color: #475569;
+}

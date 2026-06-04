@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial - Sistema RADO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style-tutorial.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container text-center">
+            <h1>MANUAL DE USUARIO: MÓDULOS PRINCIPALES</h1>
+            <p class="subtitle">SISTEMA FACTURACIÓN RADO</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro-section">
+            <p class="intro-text">Este manual servirá de guía para que el usuario pueda utilizar de manera óptima nuestra plataforma web.</p>
+            
+            <div class="indice-card">
+                <h2>Índice Temático</h2>
+                <p>Haz clic en cualquier tema para ir directamente a su explicación:</p>
+                <ol class="indice-lista">
+                    <li><a href="#panel-control">Módulo Panel de Control</a></li>
+                    <li><a href="#registro-paciente">Módulo Registro de Paciente</a></li>
+                    <li><a href="#orden-virtual">Módulo Orden Virtual</a></li>
+                    <li><a href="#factura-electronica">Módulo Factura Electrónica</a></li>
+                    <li><a href="#reportes">Módulo Generación de Reportes</a></li>
+                    <li><a href="#gestion-usuario">Módulo Gestión de Usuario</a></li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="panel-control" class="modulo-card">
+            <h2>1. Módulo Panel de Control</h2>
+            <div class="img-container">
+                <img src="img/modulo panel de control.jpg" alt="Vista del Panel de Control">
+            </div>
+            <div class="descripcion">
+                <p>En este módulo se encontrará un resumen del día dependiendo de la sede en donde estemos ubicados.</p>
+            </div>
+        </section>
+
+        <section id="registro-paciente" class="modulo-card">
+            <h2>2. Módulo Registro de Paciente</h2>
+            <div class="img-container">
+                <img src="img/modulo registro de paciente.jpg" alt="Vista del Registro de Paciente">
+            </div>
+            <div class="descripcion">
+                <p>En este módulo se empieza a dar funcionamiento a la plataforma. Primeramente, iniciamos digitando el número de documento del paciente.</p>
+                <ul>
+                    <li>Si el documento digitado ya existe, el sistema mostrará una ventana emergente donde el usuario cargará la información asociada a ese número de documento ingresado.</li>
+                    <li>De no estar registrado el número de documento, el usuario podrá pasar por cada uno de los datos que debe llenar usando el mouse o la tecla TAB. Es obligatorio llenar cada uno de los datos; de hacer falta alguno, el sistema mostrará un mensaje notificando qué datos hacen falta. En caso tal de que el paciente no desee registrar algún dato, el usuario pondrá <strong>NA</strong>.</li>
+                </ul>
+                <p>Una vez finalizada la captación de datos, el usuario deberá dar clic en el botón <strong>guardar</strong> que se encuentra en la parte superior derecha. Para luego seguir con el proceso de generación de orden virtual dando clic en el botón <em>“FINALIZAR REGISTRO Y GENERAR ORDEN VIRTUAL”</em>.</p>
+            </div>
+        </section>
+
+        <section id="orden-virtual" class="modulo-card">
+            <h2>3. Módulo Orden Virtual</h2>
+            <div class="img-container">
+                <img src="img/modulo orden virtual.jpg" alt="Vista de la Orden Virtual">
+            </div>
+            <div class="descripcion">
+                <p>El sistema cargará la información necesaria del paciente, encontrada en la sección “Datos del Paciente”.</p>
+                <p>El usuario deberá llenar la sección de “Información del Servicio”, donde podrá agregar uno o más estudios a realizar, odontólogo remitente y su correo electrónico (en caso tal de no tener, se pone <strong>NA</strong>).</p>
+                <p>En Detalles de entrega, se selecciona el “Formato de entrega”: <strong>FÍSICO, VIRTUAL o FÍSICO/VIRTUAL</strong>.</p>
+                <p>Una vez finalizada la sección, el usuario debe dar clic en <strong>“Guardar Orden”</strong> para poder enviar la orden en formato PDF a los técnicos, además servirá como puente para la generación de la factura electrónica.</p>
+            </div>
+        </section>
+
+        <section id="factura-electronica" class="modulo-card">
+            <h2>4. Módulo Factura Electrónica</h2>
+            <div class="img-container">
+                <img src="img/modulo facturacion electronica.jpg" alt="Vista de la Factura Electrónica">
+            </div>
+            <div class="descripcion">
+                <p>El sistema cargará la información de factura, información de contacto, información de la clínica (según la sede donde estemos facturando) e información de facturación.</p>
+                <p>El usuario deberá diligenciar el <strong>valor a pagar</strong> y el <strong>método de pago</strong> (EFECTIVO, CONSIGNACIÓN/TRANSFERENCIA, TARJETA DÉBITO O TARJETA CRÉDITO).</p>
+                <p>Una vez diligenciado todo correctamente, el usuario debe dar clic en <strong>guardar</strong> y luego <strong>enviar</strong>, botones que se encuentran en la parte superior derecha de la pantalla.</p>
+            </div>
+        </section>
+
+        <section id="reportes" class="modulo-card">
+            <h2>5. Módulo Generación de Reportes</h2>
+            <div class="img-container">
+                <img src="img/modulo generacion de reporte.jpg" alt="Vista de Generación de Reportes">
+            </div>
+            <div class="descripcion">
+                <p>Se podrá evidenciar por el momento: CONSOLIDADO POR SEDE, FACTURACIÓN POR SEDE y AGENDAMIENTO DE CITAS. En un futuro se puede agregar otro tipo de reporte según las necesidades del cliente.</p>
+                <ul>
+                    <li>La fecha de inicio debe ser inferior o igual a la fecha final.</li>
+                    <li><strong>Previsualizar:</strong> Es el botón donde el usuario podrá obtener una vista previa del informe previamente solicitado.</li>
+                    <li><strong>Exportar:</strong> En este botón el sistema genera un archivo en Excel, según el informe solicitado.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="gestion-usuario" class="modulo-card">
+            <h2>6. Módulo Gestión de Usuario</h2>
+            <div class="img-container">
+                <img src="img/modulo gestion de usuario.jpg" alt="Vista de Gestión de Usuario">
+            </div>
+            <div class="descripcion">
+                <p>En este módulo solo podrá tener acceso el personal administrativo autorizado. Acá se podrá <strong>agregar un nuevo usuario</strong>, el cual debe tener número de documento, clave única y rol asignado. Si el número digitado ya se encuentra en uso, el sistema no dejará guardar la información.</p>
+                <ul>
+                    <li><strong>Editar usuario:</strong> El usuario debe ingresar el número del documento que desea editar, donde podrá cambiar la clave y asignar un nuevo rol. Si el número de documento ingresado no existe, no generará ninguna acción.</li>
+                    <li><strong>Eliminar usuario:</strong> El usuario podrá eliminar un usuario existente, ingresando su número de documento y validando en el sistema que exista para que posteriormente el sistema muestre una ventana confirmando que se desea eliminar al usuario seleccionado.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer text-center">
+        <p>Sistema RADO © 2026 - Manual de Usuario | Evidencia GA6-220501096-AA4-EV01</p>
+    </footer>
+
+</body>
+</html>

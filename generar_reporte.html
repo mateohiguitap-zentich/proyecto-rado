@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generar Reporte - Sistema RADO</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style-dashboard.css">
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <p class="mb-0 fw-bold border-bottom pb-2 text-white">FACTURACIÓN RADO</p>
+            </div>
+            <ul class="nav flex-column mt-4">
+                <li class="nav-item"><a href="dashboard.html" class="nav-link"><i class="bi bi-grid-fill"></i> PANEL DE CONTROL</a></li>
+                <li class="nav-item"><a href="registro_paciente.html" class="nav-link"><i class="bi bi-person-badge"></i> REGISTRO DE PACIENTE</a></li>
+                <li class="nav-item"><a href="orden_virtual.html" class="nav-link"><i class="bi bi-file-earmark-medical"></i> ORDEN VIRTUAL</a></li>
+                <li class="nav-item"><a href="facturacion_electronica.html" class="nav-link"><i class="bi bi-receipt"></i> FACTURA ELECTRÓNICA</a></li>
+                <li class="nav-item"><a href="reportes.html" class="nav-link active"><i class="bi bi-bar-chart-line"></i> GENERAR REPORTE</a></li>
+                <li class="nav-item"><a href="gestion_usuarios.html" class="nav-link"><i class="bi bi-people"></i> GESTIÓN DE USUARIO</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="index.html" class="text-white text-decoration-none small"><i class="bi bi-box-arrow-left"></i> SALIR DEL SISTEMA</a>
+            </div>
+        </nav>
+
+        <main class="content-area bg-white"> <header class="mb-4 pb-3 border-bottom d-flex align-items-center">
+                <div class="bg-primary text-white rounded p-2 me-3 shadow-sm d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                    <i class="bi bi-file-earmark-text fs-4"></i>
+                </div>
+                <div>
+                    <h2 class="fw-bold mb-0 h4 text-dark">Generación de Reportes</h2>
+                    <p class="text-muted small mb-0">Filtre y visualice reportes detallados</p>
+                </div>
+            </header>
+
+            <div class="row align-items-end g-3 mb-5">
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Tipo de Reporte</label>
+                    <select class="form-select form-select-sm shadow-sm border-light">
+                        <option>CONSOLIDADO POR SEDE</option>
+                        <option>FACTURACIÓN POR PACIENTE</option>
+                        <option>AGENDAMIENTO DE CITAS</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Fecha Inicio</label>
+                    <div class="input-group input-group-sm shadow-sm">
+                        <span class="input-group-text bg-white border-light text-muted"><i class="bi bi-calendar-event"></i></span>
+                        <input type="date" class="form-control border-light text-muted">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Fecha Final</label>
+                    <div class="input-group input-group-sm shadow-sm">
+                        <span class="input-group-text bg-white border-light text-muted"><i class="bi bi-calendar-event"></i></span>
+                        <input type="date" class="form-control border-light text-muted">
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex">
+                    <button class="btn btn-primary btn-sm flex-grow-1 me-2 fw-bold shadow-sm d-flex align-items-center justify-content-center py-2" type="button" id="btnPrevisualizar">
+                        <i class="bi bi-search me-2"></i> Previsualizar
+                    </button>
+                    <button class="btn btn-outline-success btn-sm fw-bold shadow-sm d-flex align-items-center px-3" type="button" id="btnExportar" style="display: none;" title="Exportar a Excel">
+                        <i class="bi bi-file-earmark-excel me-1"></i> Exportar
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-light rounded-4 p-5" style="min-height: 400px;">
+                
+                <div id="estadoVacio" class="text-center py-5">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-file-earmark-text text-primary fs-1"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">Seleccione los filtros y presione Previsualizar</h5>
+                    <p class="text-muted small">Los resultados del reporte se mostrarán aquí</p>
+                </div>
+
+                <div id="tablaResultados" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="fw-bold text-primary mb-0"><i class="bi bi-table me-2"></i> Resultados del Reporte</h6>
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success">Generado con éxito</span>
+                    </div>
+                    
+                    <div class="table-responsive bg-white rounded shadow-sm">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-muted small">
+                                <tr>
+                                    <th>FECHA</th>
+                                    <th>SEDE</th>
+                                    <th>PACIENTE</th>
+                                    <th>SERVICIO</th>
+                                    <th>ESTADO</th>
+                                    <th>TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody class="small">
+                                <tr>
+                                    <td>26/03/2026</td>
+                                    <td>Obelisco</td>
+                                    <td class="fw-bold">Maria Gonzalez</td>
+                                    <td>Panorámica Dental</td>
+                                    <td><span class="text-success fw-bold">● Pagado</span></td>
+                                    <td>$28.000</td>
+                                </tr>
+                                <tr>
+                                    <td>26/03/2026</td>
+                                    <td>Centro</td>
+                                    <td class="fw-bold">Carlos Rodriguez</td>
+                                    <td>Tomografía 1-3</td>
+                                    <td><span class="text-success fw-bold">● Pagado</span></td>
+                                    <td>$170.000</td>
+                                </tr>
+                                <tr>
+                                    <td>25/03/2026</td>
+                                    <td>Obelisco</td>
+                                    <td class="fw-bold">Ana Martinez</td>
+                                    <td>Estudio Cefalométrico</td>
+                                    <td><span class="text-warning fw-bold">● Pendiente</span></td>
+                                    <td>$115.000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-end mt-3 text-muted small">
+                        Mostrando 3 registros encontrados.
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('btnPrevisualizar').addEventListener('click', function() {
+            // Ocultamos el estado vacío
+            document.getElementById('estadoVacio').style.display = 'none';
+            // Mostramos la tabla
+            document.getElementById('tablaResultados').style.display = 'block';
+            // Mostramos el botón de exportar Excel
+            document.getElementById('btnExportar').style.display = 'inline-flex';
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
