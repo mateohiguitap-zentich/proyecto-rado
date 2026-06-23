@@ -1,0 +1,11 @@
+# Ignorar clases compiladas de Java
+*.class
+
+# Ignorar la carpeta donde Java guarda compilados por defecto
+bin/
+
+# Ignorar librerías pesadas si quieres (opcional, pero recomendado)
+*.jar
+
+# Archivos de configuración de VS Code que son solo tuyos
+.vscode/
