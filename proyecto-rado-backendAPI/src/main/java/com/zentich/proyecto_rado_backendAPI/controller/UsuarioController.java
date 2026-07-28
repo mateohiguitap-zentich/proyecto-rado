@@ -20,33 +20,27 @@ import java.util.List;
 @CrossOrigin(origins = "*") 
 public class UsuarioController {
 
-    /**
-     * Inyección de dependencia del repositorio para realizar operaciones CRUD 
-     * directamente sobre la tabla de usuarios en la base de datos.
-     */
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    /**
-     * Endpoint para consultar y obtener la lista completa de usuarios registrados.
-     * Atiende las peticiones HTTP GET.
-     *
-     * @return List<Usuario> Una colección con todos los usuarios almacenados.
-     */
     @GetMapping
     public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
     }
 
-    /**
-     * Endpoint para registrar de forma persistente un nuevo usuario en el sistema.
-     * Atiende las peticiones HTTP POST y deserializa el JSON entrante.
-     *
-     * @param usuario Objeto de tipo Usuario mapeado desde el cuerpo de la petición (@RequestBody).
-     * @return Usuario El objeto persistido, devolviendo el ID autogenerado por la base de datos.
-     */
     @PostMapping
     public Usuario guardarUsuario(@RequestBody Usuario usuario) {
         return usuarioRepository.save(usuario);
+    }
+
+    @PutMapping("/{id}")
+    public Usuario actualizarUsuario(@PathVariable Integer id, @RequestBody Usuario usuarioDetalles) {
+        usuarioDetalles.setIdUsuario(id);
+        return usuarioRepository.save(usuarioDetalles);
+    }
+
+    @DeleteMapping("/{id}")
+    public void eliminarUsuario(@PathVariable Integer id) {
+        usuarioRepository.deleteById(id);
     }
 }
