@@ -3,6 +3,7 @@ package com.zentich.proyecto_rado_backendAPI.repository;
 import com.zentich.proyecto_rado_backendAPI.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
 /**
  * Interfaz de acceso a datos (DAO) para la entidad Usuario.
@@ -15,6 +16,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
-    // Spring Data JPA provee automáticamente la implementación de los métodos
-    // básicos como save(), findAll(), findById(), deleteById(), etc.
+    Optional<Usuario> findByNombreUsuario(String nombreUsuario);
 }

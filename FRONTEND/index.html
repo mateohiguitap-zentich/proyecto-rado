@@ -30,21 +30,30 @@
 
                     <h2 class="fs-6 fw-bold text-uppercase text-center mb-4" style="letter-spacing: 1px;">Inicio de sesión</h2>
                     
-                    <form>
+                    <!-- Formulario con ID para capturarlo en JavaScript -->
+                    <form id="formLogin">
                         <div class="input-group-custom">
                             <i class="bi bi-person"></i>
-                            <input type="text" placeholder="Usuario" required>
+                            <input type="text" id="loginUsuario" placeholder="Usuario" required>
                         </div>
                         
                         <div class="input-group-custom">
                             <i class="bi bi-lock"></i>
-                            <input type="password" placeholder="Contraseña" required>
+                            <input type="password" id="loginPassword" placeholder="Contraseña" required>
                         </div>
 
                         <div class="button-wrapper">
-                            <a href="dashboard.html" class="btn-acceder">ACCEDER</a>
+                            <!-- Botón de tipo submit para enviar el formulario -->
+                            <button type="submit" class="btn-acceder w-100 border-0" style="padding: 10px; border-radius: 5px; background: #004a98; color: white; font-weight: bold; cursor: pointer;">
+                                ACCEDER
+                            </button>
                         </div>
                     </form>
+
+                    <!-- Alerta de error (Oculta por defecto con d-none) -->
+                    <div id="alertaError" class="alert alert-danger mt-3 d-none text-center" style="font-size: 0.9rem; padding: 8px;">
+                        Usuario o contraseña incorrectos.
+                    </div>
 
                     <p class="footer-text">
                         © 2026 Sistema RADO | Medellín, Colombia <br>
@@ -63,5 +72,53 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script de conexión con Spring Boot -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById('formLogin').addEventListener('submit', async function(e) {
+                e.preventDefault(); // Evita que la página se recargue automáticamente
+
+                // Capturamos los valores ingresados por el usuario
+                const usuarioInput = document.getElementById('loginUsuario').value.trim();
+                const passwordInput = document.getElementById('loginPassword').value.trim();
+                const alertaError = document.getElementById('alertaError');
+
+                // Ocultamos la alerta de error por si estaba visible de un intento anterior
+                alertaError.classList.add('d-none');
+
+                // Armamos el paquete de datos DTO
+                const loginDatos = {
+                    usuario: usuarioInput,
+                    password: passwordInput
+                };
+
+                try {
+                    // Hacemos la petición POST al backend
+                    const response = await fetch('http://localhost:8080/api/usuarios/login', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json' 
+                        },
+                        body: JSON.stringify(loginDatos)
+                    });
+
+                    // Evaluamos la respuesta
+                    if (response.status === 200) {
+                        // 200 OK: Autenticación exitosa
+                        window.location.href = "dashboard.html";
+                    } else if (response.status === 401) {
+                        // 401 UNAUTHORIZED: Credenciales incorrectas
+                        alertaError.classList.remove('d-none');
+                    } else {
+                        alert("Error inesperado en el servidor.");
+                    }
+                } catch (error) {
+                    console.error("Error de conexión:", error);
+                    alert("No se pudo conectar con el servidor. Verifique que Spring Boot esté activo.");
+                }
+            });
+        });
+    </script>
 </body>
 </html>

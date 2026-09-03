@@ -1,0 +1,22 @@
+USUARIOS DE ACCESO CREADOS
+
+[
+    {
+        "contrasenaUsuario": "Admin123*",
+        "idUsuario": 1,
+        "nombreUsuario": "Administrador",
+        "rolUsuario": "ADMINISTRADOR"
+    },
+    {
+        "contrasenaUsuario": "Prueba123*",
+        "idUsuario": 2,
+        "nombreUsuario": "Prueba",
+        "rolUsuario": "ADMINISTRADOR"
+    },
+    {
+        "contrasenaUsuario": "123456",
+        "idUsuario": 5,
+        "nombreUsuario": "admin",
+        "rolUsuario": "ADMINISTRADOR"
+    }
+]

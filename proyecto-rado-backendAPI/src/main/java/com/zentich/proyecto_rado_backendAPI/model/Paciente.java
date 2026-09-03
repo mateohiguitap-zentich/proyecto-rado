@@ -26,6 +26,9 @@ public class Paciente {
     @Column(name = "fecha_nacimiento_paciente")
     private LocalDate fechaNacimientoPaciente;
 
+    @Column(name = "sexo", length = 20)
+    private String sexo;
+
     @Column(name = "direccion_paciente", length = 100)
     private String direccionPaciente;
 
@@ -79,6 +82,14 @@ public class Paciente {
 
     public void setFechaNacimientoPaciente(LocalDate fechaNacimientoPaciente) {
         this.fechaNacimientoPaciente = fechaNacimientoPaciente;
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
     }
 
     public String getDireccionPaciente() {

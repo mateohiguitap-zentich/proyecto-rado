@@ -12,6 +12,7 @@ public class RegistroPacienteDTO {
     private String direccionPaciente;
     private String telefonoPaciente;
     private String emailPaciente;
+    private String sexo; // <--- ¡CAMPO AGREGADO AQUÍ!
 
     // Datos Contacto Emergencia
     private String nombreContacto;
@@ -66,6 +67,15 @@ public class RegistroPacienteDTO {
 
     public void setEmailPaciente(String emailPaciente) {
         this.emailPaciente = emailPaciente;
+    }
+
+    // --- GETTER Y SETTER DE SEXO (NUEVOS) ---
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
     }
 
     public String getNombreContacto() {

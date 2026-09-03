@@ -32,6 +32,7 @@ public class PacienteService {
         paciente.setDireccionPaciente(dto.getDireccionPaciente());
         paciente.setTelefonoPaciente(dto.getTelefonoPaciente());
         paciente.setEmailPaciente(dto.getEmailPaciente());
+        paciente.setSexo(dto.getSexo());
         
         Paciente pacienteGuardado = pacienteRepository.save(paciente);
 
@@ -68,6 +69,7 @@ public class PacienteService {
         pacienteExistente.setDireccionPaciente(dto.getDireccionPaciente());
         pacienteExistente.setTelefonoPaciente(dto.getTelefonoPaciente());
         pacienteExistente.setEmailPaciente(dto.getEmailPaciente());
+        pacienteExistente.setSexo(dto.getSexo());
 
         // Actualizamos el contacto de emergencia si existe en el JSON
         if (pacienteExistente.getContactos() != null && !pacienteExistente.getContactos().isEmpty()) {
