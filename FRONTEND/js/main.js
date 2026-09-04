@@ -72,7 +72,6 @@ document.addEventListener("DOMContentLoaded", function() {
         btnFinalizar.addEventListener('click', async function(e) {
             e.preventDefault(); 
 
-            // Si el paciente ya existe, nos saltamos el guardado y vamos directo a la orden
             if (this.dataset.existe === "true") {
                 guardarDatosMemoria(); 
                 window.location.href = "orden_virtual.html";
@@ -88,6 +87,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 telefonoPaciente: document.getElementById('telPaciente').value,
                 emailPaciente: document.getElementById('emailPaciente').value,
                 sexo: document.getElementById('generoPaciente').value,
+                // <--- NUEVOS CAMPOS AQUÍ --->
+                estadoCivil: document.getElementById('estadoCivil') ? document.getElementById('estadoCivil').value : "",
+                aseguradora: document.getElementById('aseguradora') ? document.getElementById('aseguradora').value : "",
+                tipoVinculacion: document.getElementById('tipoVinculacion') ? document.getElementById('tipoVinculacion').value : "",
+                // <-------------------------->
                 nombreContacto: document.getElementById('nomContacto').value,
                 telefonoContacto: document.getElementById('telContacto').value,
                 parentescoContacto: document.getElementById('parentescoContacto').value
@@ -146,11 +150,9 @@ document.addEventListener("DOMContentLoaded", function() {
                         
                         console.log("DATOS REALES DEL SERVIDOR:", paciente);
 
-                        // Mostrar barra y guardar ID
                         document.getElementById('idPacienteOculto').value = paciente.idPaciente;
                         document.getElementById('barraAccionesPaciente').classList.remove('d-none');
                         
-                        // Llenar casillas
                         if(paciente.tipoDocumento) {
                             document.getElementById('tipoDoc').value = paciente.tipoDocumento; 
                         }
@@ -163,7 +165,19 @@ document.addEventListener("DOMContentLoaded", function() {
                         if(paciente.sexo) {
                             const selectGenero = document.getElementById('generoPaciente');
                             if(selectGenero) selectGenero.value = paciente.sexo;
-}
+                        }
+
+                        // <--- NUEVOS CAMPOS AQUÍ --->
+                        if(paciente.estadoCivil && document.getElementById('estadoCivil')) {
+                            document.getElementById('estadoCivil').value = paciente.estadoCivil;
+                        }
+                        if(paciente.aseguradora && document.getElementById('aseguradora')) {
+                            document.getElementById('aseguradora').value = paciente.aseguradora;
+                        }
+                        if(paciente.tipoVinculacion && document.getElementById('tipoVinculacion')) {
+                            document.getElementById('tipoVinculacion').value = paciente.tipoVinculacion;
+                        }
+                        // <-------------------------->
                         
                         if(paciente.contactos && paciente.contactos.length > 0) {
                             document.getElementById('nomContacto').value = paciente.contactos[0].nombreContactoEmergencia;
@@ -178,7 +192,6 @@ document.addEventListener("DOMContentLoaded", function() {
                         const eventoFecha = new Event('change');
                         document.getElementById('fechaNacimiento').dispatchEvent(eventoFecha);
                     } else {
-                        // Ocultar barra 
                         document.getElementById('idPacienteOculto').value = "";
                         document.getElementById('barraAccionesPaciente').classList.add('d-none');
 
@@ -203,7 +216,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (btnActualizar && btnEliminar) {
         
-        // --- FUNCIÓN ACTUALIZAR (PUT) ---
         btnActualizar.addEventListener('click', async function() {
             const idPaciente = document.getElementById('idPacienteOculto').value;
             
@@ -216,6 +228,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 telefonoPaciente: document.getElementById('telPaciente').value,
                 emailPaciente: document.getElementById('emailPaciente').value,
                 sexo: document.getElementById('generoPaciente').value,
+                // <--- NUEVOS CAMPOS AQUÍ --->
+                estadoCivil: document.getElementById('estadoCivil') ? document.getElementById('estadoCivil').value : "",
+                aseguradora: document.getElementById('aseguradora') ? document.getElementById('aseguradora').value : "",
+                tipoVinculacion: document.getElementById('tipoVinculacion') ? document.getElementById('tipoVinculacion').value : "",
+                // <-------------------------->
                 nombreContacto: document.getElementById('nomContacto').value,
                 telefonoContacto: document.getElementById('telContacto').value,
                 parentescoContacto: document.getElementById('parentescoContacto').value
@@ -239,7 +256,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 
-        // --- FUNCIÓN ELIMINAR (DELETE) ---
         btnEliminar.addEventListener('click', async function() {
             const idPaciente = document.getElementById('idPacienteOculto').value;
             const nombre = document.getElementById('nomPaciente').value;
@@ -270,7 +286,6 @@ document.addEventListener("DOMContentLoaded", function() {
 // FUNCIÓN AUXILIAR: GUARDAR DATOS EN MEMORIA LOCAL
 // =====================================================================
 function guardarDatosMemoria() {
-    // NUEVO: Capturar el ID del paciente oculto
     const idOculto = document.getElementById('idPacienteOculto');
     if (idOculto && idOculto.value !== "") {
         localStorage.setItem('rado_idPaciente', idOculto.value);
@@ -282,6 +297,17 @@ function guardarDatosMemoria() {
     
     const genero = document.getElementById('generoPaciente');
     if(genero) localStorage.setItem('rado_sexo', genero.value);
+
+    // <--- NUEVOS CAMPOS AQUÍ (Opcional pero recomendado) --->
+    const estCivil = document.getElementById('estadoCivil');
+    if(estCivil) localStorage.setItem('rado_estadoCivil', estCivil.value);
+    
+    const aseguradora = document.getElementById('aseguradora');
+    if(aseguradora) localStorage.setItem('rado_aseguradora', aseguradora.value);
+    
+    const vinculacion = document.getElementById('tipoVinculacion');
+    if(vinculacion) localStorage.setItem('rado_tipoVinculacion', vinculacion.value);
+    // <------------------------------------------------------->
 }
 
 // =====================================================================
@@ -291,13 +317,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const docOrdenInput = document.getElementById('docOrden'); 
     
     if (docOrdenInput) {
-        // 1. Extraer los datos de la memoria
         const nombre = localStorage.getItem('rado_nombre');
         const doc = localStorage.getItem('rado_documento');
         const fecha = localStorage.getItem('rado_fechaNac');
         const sexo = localStorage.getItem('rado_sexo');
 
-        // 2. Llenar las casillas
         if (nombre) document.getElementById('nombreOrden').value = nombre;
         if (doc) docOrdenInput.value = doc;
         
@@ -306,7 +330,6 @@ document.addEventListener("DOMContentLoaded", function() {
             if(sexoSelect) sexoSelect.value = sexo;
         }
         
-        // 3. Insertar la fecha y calcular la edad automáticamente
         if (fecha) {
             const fechaInput = document.getElementById('fechaNacOrden');
             if(fechaInput) fechaInput.value = fecha;
@@ -335,7 +358,6 @@ document.addEventListener("DOMContentLoaded", function() {
         formOrden.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // 1. Recopilar todos los estudios agregados en los badges
             const badges = document.querySelectorAll('#contenedorEstudios .badge');
             let listaEstudios = [];
             badges.forEach(b => {
@@ -348,15 +370,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 return;
             }
 
-            // 2. Capturar datos de los campos
             const odontologo = document.getElementById('odontologoOrden').value.trim() || "N/A";
             const correo = document.getElementById('correoOdontologoOrden').value.trim() || "N/A";
             const formatoEntrega = document.querySelector('.form-select').value || "No especificado";
 
-            // 3. Armar la descripción concatenada
             const descripcionFinal = `Estudios: ${listaEstudios.join(", ")} | Odontólogo: ${odontologo} | Correo: ${correo} | Formato: ${formatoEntrega}`;
 
-            // 4. Preparar el paquete para Spring Boot
             const ordenDTO = {
                 idPaciente: localStorage.getItem('rado_idPaciente') || 0,
                 idUsuario: 1, 
@@ -365,7 +384,6 @@ document.addEventListener("DOMContentLoaded", function() {
             };
 
             try {
-                // 5. Enviar a la Base de Datos
                 const response = await fetch('http://localhost:8080/api/ordenes/guardar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -375,10 +393,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (response.status === 201) {
                     alert("¡Orden guardada en la base de datos con éxito! Se abrirá la ventana de impresión.");
                     
-                    // Guardar los estudios en memoria para usarlos en facturación
                     localStorage.setItem('rado_estudios_orden', listaEstudios.join(", "));
 
-                    // 6. Preparar la vista para impresión limpia (ocultar sidebar y botones)
                     const sidebar = document.querySelector('.sidebar');
                     const headerActions = document.querySelector('.header-actions');
                     const footerButtons = document.querySelector('.d-flex.justify-content-end.mt-4');
@@ -389,10 +405,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     if(footerButtons) footerButtons.style.display = 'none';
                     iconos.forEach(el => el.style.display = 'none');
 
-                    // 7. Lanzar la ventana de impresión nativa
                     window.print();
 
-                    // 8. Restaurar la interfaz y redirigir a facturación al cerrar o completar la impresión
                     window.onafterprint = function() {
                         if(sidebar) sidebar.style.display = '';
                         if(headerActions) headerActions.style.display = '';

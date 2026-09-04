@@ -33,6 +33,9 @@ public class PacienteService {
         paciente.setTelefonoPaciente(dto.getTelefonoPaciente());
         paciente.setEmailPaciente(dto.getEmailPaciente());
         paciente.setSexo(dto.getSexo());
+        paciente.setEstadoCivil(dto.getEstadoCivil());
+        paciente.setAseguradora(dto.getAseguradora());
+        paciente.setTipoVinculacion(dto.getTipoVinculacion());
         
         Paciente pacienteGuardado = pacienteRepository.save(paciente);
 
@@ -70,6 +73,9 @@ public class PacienteService {
         pacienteExistente.setTelefonoPaciente(dto.getTelefonoPaciente());
         pacienteExistente.setEmailPaciente(dto.getEmailPaciente());
         pacienteExistente.setSexo(dto.getSexo());
+        pacienteExistente.setEstadoCivil(dto.getEstadoCivil());
+        pacienteExistente.setAseguradora(dto.getAseguradora());
+        pacienteExistente.setTipoVinculacion(dto.getTipoVinculacion());
 
         // Actualizamos el contacto de emergencia si existe en el JSON
         if (pacienteExistente.getContactos() != null && !pacienteExistente.getContactos().isEmpty()) {

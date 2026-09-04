@@ -38,6 +38,15 @@ public class Paciente {
     @Column(name = "email_paciente", length = 100)
     private String emailPaciente;
 
+    @Column(name = "estado_civil", length = 30)
+    private String estadoCivil;
+
+    @Column(name = "aseguradora", length = 100)
+    private String aseguradora;
+
+    @Column(name = "tipo_vinculacion", length = 50)
+    private String tipoVinculacion;
+
     @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ContactoEmergencia> contactos;
@@ -114,6 +123,28 @@ public class Paciente {
 
     public void setEmailPaciente(String emailPaciente) {
         this.emailPaciente = emailPaciente;
+    }
+
+    public String getEstadoCivil() { 
+        return estadoCivil;
+    }
+
+    public void setEstadoCivil(String estadoCivil) { 
+        this.estadoCivil = estadoCivil; 
+    }
+
+    public String getAseguradora() { 
+        return aseguradora; 
+    }
+    public void setAseguradora(String aseguradora) { 
+        this.aseguradora = aseguradora; 
+    }
+
+    public String getTipoVinculacion() { 
+        return tipoVinculacion; 
+    }
+    public void setTipoVinculacion(String tipoVinculacion) { 
+        this.tipoVinculacion = tipoVinculacion; 
     }
 
     public List<ContactoEmergencia> getContactos() {

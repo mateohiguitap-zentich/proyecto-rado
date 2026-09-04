@@ -12,7 +12,10 @@ public class RegistroPacienteDTO {
     private String direccionPaciente;
     private String telefonoPaciente;
     private String emailPaciente;
-    private String sexo; // <--- ¡CAMPO AGREGADO AQUÍ!
+    private String sexo;
+    private String estadoCivil;
+    private String aseguradora;
+    private String tipoVinculacion;
 
     // Datos Contacto Emergencia
     private String nombreContacto;
@@ -67,6 +70,30 @@ public class RegistroPacienteDTO {
 
     public void setEmailPaciente(String emailPaciente) {
         this.emailPaciente = emailPaciente;
+    }
+
+    public String getEstadoCivil() { 
+        return estadoCivil; 
+    }
+
+    public void setEstadoCivil(String estadoCivil) { 
+        this.estadoCivil = estadoCivil; 
+    }
+
+    public String getAseguradora() { 
+        return aseguradora; 
+    }
+
+    public void setAseguradora(String aseguradora) { 
+        this.aseguradora = aseguradora; 
+    }
+
+    public String getTipoVinculacion() { 
+        return tipoVinculacion; 
+    }
+
+    public void setTipoVinculacion(String tipoVinculacion) { 
+        this.tipoVinculacion = tipoVinculacion; 
     }
 
     // --- GETTER Y SETTER DE SEXO (NUEVOS) ---
