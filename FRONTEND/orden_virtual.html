@@ -47,31 +47,26 @@
                     <div class="row g-4">
                         <div class="col-12">
                             <label class="form-label small fw-bold text-muted">Nombre Completo *</label>
-                            <!-- ID AGREGADO AQUÍ -->
                             <input type="text" id="nombreOrden" class="form-control form-control-sm bg-light text-muted" value="Ingrese nombre completo del paciente" readonly>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label small fw-bold text-muted">Número de Documento *</label>
-                            <!-- ID AGREGADO AQUÍ -->
                             <input type="text" id="docOrden" class="form-control form-control-sm bg-light text-muted" value="Ej: 12345678" readonly>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label small fw-bold text-muted">Sexo *</label>
-                            <!-- ID AGREGADO AQUÍ -->
                             <input type="text" id="sexoOrden" class="form-control form-control-sm bg-light text-muted" value="Seleccione" readonly>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label small fw-bold text-muted">Fecha de Nacimiento *</label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text bg-light"><i class="bi bi-calendar3"></i></span>
-                                <!-- ID AGREGADO AQUÍ -->
                                 <input type="text" id="fechaNacOrden" class="form-control bg-light text-muted" value="dd/mm/aaaa" readonly>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label small fw-bold text-muted">Edad</label>
                             <div class="d-flex align-items-center">
-                                <!-- ID AGREGADO AQUÍ -->
                                 <input type="text" id="edadOrden" class="form-control form-control-sm bg-light text-muted w-50 me-2" value="0" readonly>
                                 <span class="small text-muted">años</span>
                             </div>
@@ -83,14 +78,27 @@
                     <h6 class="fw-bold text-primary mb-4"><i class="bi bi-file-earmark-text me-2"></i> Información del Servicio</h6>
                     <div class="row g-4">
                         <div class="col-12">
-                            <label class="form-label small fw-bold text-dark">Estudio a Realizar *</label>
-                            <div class="input-group input-group-sm mb-2">
-                                <input type="text" id="inputEstudio" class="form-control" placeholder="Escriba el tipo de estudio a realizar">
-                                <button class="btn btn-primary px-3 fw-bold" type="button" id="btnAgregarEstudio">
-                                    <i class="bi bi-plus-lg"></i> Agregar
-                                </button>
+                            <!-- BLOQUE ACTUALIZADO: Select Dinámico y Observaciones -->
+                            <div class="row g-2 mb-3">
+                                <div class="col-md-5">
+                                    <label class="form-label small fw-bold text-dark">Seleccionar Estudio *</label>
+                                    <select class="form-select form-select-sm" id="selectEstudio">
+                                        <option value="" selected disabled>Cargando estudios...</option>
+                                        <!-- JS llenará esto con los 33 estudios de la Base de Datos -->
+                                    </select>
+                                </div>
+                                <div class="col-md-5">
+                                    <label class="form-label small fw-bold text-dark">Observaciones (Opcional)</label>
+                                    <input type="text" class="form-control form-control-sm" id="inputObservacion" placeholder="Ej: Diente 16, Cuadrante 2...">
+                                </div>
+                                <div class="col-md-2 d-flex align-items-end">
+                                    <button type="button" class="btn btn-primary btn-sm w-100 fw-bold" id="btnAgregarEstudio">
+                                        <i class="bi bi-plus-lg"></i> Agregar
+                                    </button>
+                                </div>
                             </div>
                             
+                            <!-- Contenedor donde se verán los estudios agregados -->
                             <div id="contenedorEstudios" class="p-2 border rounded bg-light d-flex flex-wrap align-items-center" style="min-height: 50px; gap: 8px;">
                                 <span id="textoPlaceholder" class="text-muted small fst-italic w-100 text-center">Los estudios agregados aparecerán aquí...</span>
                             </div>
@@ -104,7 +112,6 @@
                             <label class="form-label small fw-bold text-dark">Correo Electrónico *</label>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                <!-- Agregamos id="correoOdontologoOrden" -->
                                 <input type="email" id="correoOdontologoOrden" class="form-control" placeholder="ejemplo@correo.com">
                             </div>
                         </div>

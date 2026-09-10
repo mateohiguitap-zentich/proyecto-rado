@@ -17,24 +17,62 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // =====================================================================
-// BOTÓN AGREGAR ESTUDIO EN LA SECCIÓN ORDEN VIRTUAL
+// CARGAR CATÁLOGO DE ESTUDIOS Y LÓGICA DE AGREGAR EN ORDEN VIRTUAL
 // =====================================================================
-document.addEventListener("DOMContentLoaded", function() {
-    const inputEstudio = document.getElementById('inputEstudio');
+document.addEventListener("DOMContentLoaded", async function() {
+    const selectEstudio = document.getElementById('selectEstudio');
+    const inputObservacion = document.getElementById('inputObservacion');
     const btnAgregar = document.getElementById('btnAgregarEstudio');
     const contenedor = document.getElementById('contenedorEstudios');
     const placeholder = document.getElementById('textoPlaceholder');
 
-    if (btnAgregar && inputEstudio && contenedor) {
+    // 1. Cargar la lista de estudios desde MySQL al abrir la página
+    if (selectEstudio) {
+        try {
+            const response = await fetch('http://localhost:8080/api/estudios/listar');
+            if (response.ok) {
+                const estudios = await response.json();
+                selectEstudio.innerHTML = '<option value="" selected disabled>Seleccione un estudio...</option>';
+                
+                estudios.forEach(est => {
+                    selectEstudio.innerHTML += `<option value="${est.idEstudio}" data-nombre="${est.nombre}">${est.nombre}</option>`;
+                });
+            }
+        } catch (error) {
+            console.error("Error al cargar el catálogo de estudios:", error);
+            selectEstudio.innerHTML = '<option value="" selected disabled>Error cargando estudios</option>';
+        }
+    }
+
+    // 2. Lógica para agregar el estudio a la lista (Badges)
+    if (btnAgregar && selectEstudio && contenedor) {
         function agregarEstudio() {
-            const nombreEstudio = inputEstudio.value.trim(); 
-            if (nombreEstudio === "") return;
+            const idEstudio = selectEstudio.value;
+            if (!idEstudio) {
+                alert("Por favor, seleccione un estudio de la lista.");
+                return;
+            }
+
+            const opcionSeleccionada = selectEstudio.options[selectEstudio.selectedIndex];
+            const nombreEstudio = opcionSeleccionada.dataset.nombre;
+            const observacion = inputObservacion.value.trim(); 
+            
             if (placeholder) placeholder.style.display = 'none';
 
+            // Armar el texto visual
+            let textoVisual = nombreEstudio;
+            if(observacion !== "") textoVisual += ` <small class="text-muted fst-italic">(${observacion})</small>`;
+
             const badge = document.createElement('div');
-            badge.className = 'badge bg-white text-dark border p-2 shadow-sm d-inline-flex align-items-center';
+            badge.className = 'badge bg-white text-dark border p-2 shadow-sm d-inline-flex align-items-center mb-2 me-2';
+            
+            // Guardar los datos reales en el HTML de forma oculta para leerlos al guardar
+            badge.dataset.id = idEstudio;
+            badge.dataset.nombre = nombreEstudio;
+            badge.dataset.observacion = observacion;
+
             badge.innerHTML = `
-                ${nombreEstudio} 
+                ${textoVisual} 
                 <i class="bi bi-x-circle-fill text-danger ms-2" style="cursor: pointer; font-size: 1.1rem;" title="Eliminar estudio"></i>
             `;
 
@@ -47,18 +85,22 @@ document.addEventListener("DOMContentLoaded", function() {
             });
 
             contenedor.appendChild(badge);
-            inputEstudio.value = '';
-            inputEstudio.focus();
+            
+            // Limpiar campos después de agregar
+            selectEstudio.value = '';
+            inputObservacion.value = '';
         }
 
         btnAgregar.addEventListener('click', agregarEstudio);
 
-        inputEstudio.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault(); 
-                agregarEstudio();
-            }
-        });
+        if(inputObservacion) {
+            inputObservacion.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); 
+                    agregarEstudio();
+                }
+            });
+        }
     }
 });
 
@@ -87,11 +129,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 telefonoPaciente: document.getElementById('telPaciente').value,
                 emailPaciente: document.getElementById('emailPaciente').value,
                 sexo: document.getElementById('generoPaciente').value,
-                // <--- NUEVOS CAMPOS AQUÍ --->
                 estadoCivil: document.getElementById('estadoCivil') ? document.getElementById('estadoCivil').value : "",
                 aseguradora: document.getElementById('aseguradora') ? document.getElementById('aseguradora').value : "",
                 tipoVinculacion: document.getElementById('tipoVinculacion') ? document.getElementById('tipoVinculacion').value : "",
-                // <-------------------------->
                 nombreContacto: document.getElementById('nomContacto').value,
                 telefonoContacto: document.getElementById('telContacto').value,
                 parentescoContacto: document.getElementById('parentescoContacto').value
@@ -148,8 +188,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     if(response.status === 200) {
                         const paciente = await response.json();
                         
-                        console.log("DATOS REALES DEL SERVIDOR:", paciente);
-
                         document.getElementById('idPacienteOculto').value = paciente.idPaciente;
                         document.getElementById('barraAccionesPaciente').classList.remove('d-none');
                         
@@ -167,7 +205,6 @@ document.addEventListener("DOMContentLoaded", function() {
                             if(selectGenero) selectGenero.value = paciente.sexo;
                         }
 
-                        // <--- NUEVOS CAMPOS AQUÍ --->
                         if(paciente.estadoCivil && document.getElementById('estadoCivil')) {
                             document.getElementById('estadoCivil').value = paciente.estadoCivil;
                         }
@@ -177,7 +214,6 @@ document.addEventListener("DOMContentLoaded", function() {
                         if(paciente.tipoVinculacion && document.getElementById('tipoVinculacion')) {
                             document.getElementById('tipoVinculacion').value = paciente.tipoVinculacion;
                         }
-                        // <-------------------------->
                         
                         if(paciente.contactos && paciente.contactos.length > 0) {
                             document.getElementById('nomContacto').value = paciente.contactos[0].nombreContactoEmergencia;
@@ -215,7 +251,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const btnEliminar = document.getElementById('btnEliminarArriba');
 
     if (btnActualizar && btnEliminar) {
-        
         btnActualizar.addEventListener('click', async function() {
             const idPaciente = document.getElementById('idPacienteOculto').value;
             
@@ -228,11 +263,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 telefonoPaciente: document.getElementById('telPaciente').value,
                 emailPaciente: document.getElementById('emailPaciente').value,
                 sexo: document.getElementById('generoPaciente').value,
-                // <--- NUEVOS CAMPOS AQUÍ --->
                 estadoCivil: document.getElementById('estadoCivil') ? document.getElementById('estadoCivil').value : "",
                 aseguradora: document.getElementById('aseguradora') ? document.getElementById('aseguradora').value : "",
                 tipoVinculacion: document.getElementById('tipoVinculacion') ? document.getElementById('tipoVinculacion').value : "",
-                // <-------------------------->
                 nombreContacto: document.getElementById('nomContacto').value,
                 telefonoContacto: document.getElementById('telContacto').value,
                 parentescoContacto: document.getElementById('parentescoContacto').value
@@ -259,15 +292,11 @@ document.addEventListener("DOMContentLoaded", function() {
         btnEliminar.addEventListener('click', async function() {
             const idPaciente = document.getElementById('idPacienteOculto').value;
             const nombre = document.getElementById('nomPaciente').value;
-
             const seguro = confirm(`⚠️ ADVERTENCIA: ¿Está seguro que desea eliminar todo el historial de ${nombre}?\n\nEsta acción borrará al paciente y sus contactos de emergencia.`);
             
             if (seguro) {
                 try {
-                    const response = await fetch('http://localhost:8080/api/pacientes/eliminar/' + idPaciente, {
-                        method: 'DELETE'
-                    });
-
+                    const response = await fetch('http://localhost:8080/api/pacientes/eliminar/' + idPaciente, { method: 'DELETE' });
                     if (response.status === 200) {
                         alert("Registro eliminado definitivamente.");
                         window.location.reload(); 
@@ -298,7 +327,6 @@ function guardarDatosMemoria() {
     const genero = document.getElementById('generoPaciente');
     if(genero) localStorage.setItem('rado_sexo', genero.value);
 
-    // <--- NUEVOS CAMPOS AQUÍ (Opcional pero recomendado) --->
     const estCivil = document.getElementById('estadoCivil');
     if(estCivil) localStorage.setItem('rado_estadoCivil', estCivil.value);
     
@@ -307,7 +335,6 @@ function guardarDatosMemoria() {
     
     const vinculacion = document.getElementById('tipoVinculacion');
     if(vinculacion) localStorage.setItem('rado_tipoVinculacion', vinculacion.value);
-    // <------------------------------------------------------->
 }
 
 // =====================================================================
@@ -347,7 +374,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // =====================================================================
-// GUARDAR ORDEN E IMPRIMIR / GUARDAR COMO PDF (NATIVO)
+// GUARDAR ORDEN E IMPRIMIR / GUARDAR COMO PDF (NATIVO / HTML2PDF)
 // =====================================================================
 document.addEventListener("DOMContentLoaded", function() {
     const formOrden = document.querySelector('form'); 
@@ -359,13 +386,22 @@ document.addEventListener("DOMContentLoaded", function() {
             e.preventDefault();
 
             const badges = document.querySelectorAll('#contenedorEstudios .badge');
-            let listaEstudios = [];
+            let listaEstudiosEstructurada = [];
+            let descripcionNombres = [];
+
             badges.forEach(b => {
-                const textoEstudio = b.childNodes[0].nodeValue.trim();
-                listaEstudios.push(textoEstudio);
+                listaEstudiosEstructurada.push({
+                    idEstudio: b.dataset.id,
+                    nombre: b.dataset.nombre,
+                    observacion: b.dataset.observacion
+                });
+                
+                let textoDesc = b.dataset.nombre;
+                if(b.dataset.observacion) textoDesc += ` (${b.dataset.observacion})`;
+                descripcionNombres.push(textoDesc);
             });
 
-            if (listaEstudios.length === 0) {
+            if (listaEstudiosEstructurada.length === 0) {
                 alert("Debe agregar al menos un estudio a la orden.");
                 return;
             }
@@ -374,12 +410,18 @@ document.addEventListener("DOMContentLoaded", function() {
             const correo = document.getElementById('correoOdontologoOrden').value.trim() || "N/A";
             const formatoEntrega = document.querySelector('.form-select').value || "No especificado";
 
-            const descripcionFinal = `Estudios: ${listaEstudios.join(", ")} | Odontólogo: ${odontologo} | Correo: ${correo} | Formato: ${formatoEntrega}`;
+            const descripcionFinal = `Estudios: ${descripcionNombres.join(", ")} | Odontólogo: ${odontologo} | Correo: ${correo} | Formato: ${formatoEntrega}`;
+
+            let idSedeActual = localStorage.getItem('rado_sede_id');
+            if(!idSedeActual) {
+                alert("Por favor seleccione una sede en el Dashboard antes de crear órdenes.");
+                return;
+            }
 
             const ordenDTO = {
                 idPaciente: localStorage.getItem('rado_idPaciente') || 0,
                 idUsuario: 1, 
-                idSede: 1,
+                idSede: parseInt(idSedeActual),
                 descripcion: descripcionFinal
             };
 
@@ -391,30 +433,57 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
 
                 if (response.status === 201) {
-                    alert("¡Orden guardada en la base de datos con éxito! Se abrirá la ventana de impresión.");
+                    const ordenGuardada = await response.json();
                     
-                    localStorage.setItem('rado_estudios_orden', listaEstudios.join(", "));
+                    localStorage.setItem('rado_estudios_orden_json', JSON.stringify(listaEstudiosEstructurada));
+                    localStorage.setItem('rado_ultima_orden_id', ordenGuardada.idOrden);
 
-                    const sidebar = document.querySelector('.sidebar');
-                    const headerActions = document.querySelector('.header-actions');
-                    const footerButtons = document.querySelector('.d-flex.justify-content-end.mt-4');
-                    const iconos = document.querySelectorAll('#contenedorEstudios i');
+                    // Mensaje de éxito para confirmar que en MySQL todo está OK
+                    alert("¡Orden guardada con éxito! Generando PDF...");
 
-                    if(sidebar) sidebar.style.display = 'none';
-                    if(headerActions) headerActions.style.display = 'none';
-                    if(footerButtons) footerButtons.style.display = 'none';
-                    iconos.forEach(el => el.style.display = 'none');
+                    if (typeof html2pdf !== 'undefined') {
+                        const sidebar = document.querySelector('.sidebar');
+                        const headerActions = document.querySelector('.header-actions');
+                        const footerButtons = document.querySelector('.d-flex.justify-content-end.mt-4');
+                        const iconos = document.querySelectorAll('#contenedorEstudios i');
 
-                    window.print();
+                        if(sidebar) sidebar.style.display = 'none';
+                        if(headerActions) headerActions.style.display = 'none';
+                        if(footerButtons) footerButtons.style.display = 'none';
+                        iconos.forEach(el => el.style.display = 'none');
 
-                    window.onafterprint = function() {
-                        if(sidebar) sidebar.style.display = '';
-                        if(headerActions) headerActions.style.display = '';
-                        if(footerButtons) headerActions.style.display = '';
-                        iconos.forEach(el => el.style.display = '');
+                        const elementoAImprimir = document.querySelector('.content-area');
+                        const docNum = document.getElementById('docOrden') ? document.getElementById('docOrden').value : '000';
+                        
+                        html2pdf().set({
+                            margin: 0.5,
+                            filename: `Orden_Virtual_${docNum}.pdf`,
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2 },
+                            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                        }).from(elementoAImprimir).save().then(() => {
+                            
+                            // LA MAGIA: Esperamos 2 segundos para que el navegador descargue el archivo antes de cambiar de página
+                            setTimeout(() => {
+                                // Restaurar vista por si acaso
+                                if(sidebar) sidebar.style.display = '';
+                                if(headerActions) headerActions.style.display = '';
+                                if(footerButtons) headerActions.style.display = '';
+                                iconos.forEach(el => el.style.display = '');
 
+                                window.location.href = "facturacion_electronica.html";
+                            }, 2000);
+
+                        }).catch(err => {
+                            console.error("Fallo al generar el PDF de fondo: ", err);
+                            window.location.href = "facturacion_electronica.html";
+                        });
+
+                    } else {
+                        console.warn("Librería PDF no detectada. Usando modo de impresión nativo.");
+                        window.print();
                         window.location.href = "facturacion_electronica.html";
-                    };
+                    }
 
                 } else {
                     const errorMsg = await response.text();
@@ -425,5 +494,257 @@ document.addEventListener("DOMContentLoaded", function() {
                 alert("Error de conexión con el servidor backend.");
             }
         });
+    }
+});
+
+// =====================================================================
+// CARGAR SEDES DINÁMICAMENTE EN EL DASHBOARD
+// =====================================================================
+document.addEventListener("DOMContentLoaded", async function() {
+    const sedeActualSpan = document.getElementById('sedeActual');
+    const dropdownMenu = document.querySelector('ul[aria-labelledby="dropdownSedes"]');
+
+    if (sedeActualSpan && dropdownMenu) {
+        try {
+            const response = await fetch('http://localhost:8080/api/sedes/listar');
+            if (response.ok) {
+                const sedes = await response.json();
+                dropdownMenu.innerHTML = '<li><h6 class="dropdown-header small text-muted">Seleccionar Sede</h6></li>';
+
+                let sedeGuardadaId = localStorage.getItem('rado_sede_id');
+                let sedeGuardadaNombre = localStorage.getItem('rado_sede_nombre');
+
+                if ((!sedeGuardadaId || !sedeGuardadaNombre) && sedes.length > 0) {
+                    sedeGuardadaId = sedes[0].idSede;
+                    sedeGuardadaNombre = sedes[0].nombreSede;
+                    localStorage.setItem('rado_sede_id', sedeGuardadaId);
+                    localStorage.setItem('rado_sede_nombre', sedeGuardadaNombre);
+                }
+
+                if (sedeGuardadaNombre) {
+                    sedeActualSpan.textContent = sedeGuardadaNombre;
+                }
+
+                if (sedeGuardadaId) {
+                    cargarMetricasDashboard(sedeGuardadaId);
+                }
+
+                sedes.forEach(sede => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.className = 'dropdown-item small py-2';
+                    a.href = '#';
+                    a.innerHTML = `<i class="bi bi-geo-alt me-2"></i> ${sede.nombreSede}`;
+
+                    a.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        localStorage.setItem('rado_sede_id', sede.idSede);
+                        localStorage.setItem('rado_sede_nombre', sede.nombreSede);
+                        sedeActualSpan.textContent = sede.nombreSede;
+                        cargarMetricasDashboard(sede.idSede);
+                    });
+
+                    li.appendChild(a);
+                    dropdownMenu.appendChild(li);
+                });
+            }
+        } catch (error) {
+            console.error("Fallo de conexión al cargar sedes:", error);
+        }
+    }
+});
+
+// =====================================================================
+// FUNCIÓN PARA CONSULTAR Y PINTAR MÉTRICAS DEL DASHBOARD
+// =====================================================================
+async function cargarMetricasDashboard(idSede) {
+    try {
+        const response = await fetch('http://localhost:8080/api/dashboard/metricas/' + idSede);
+        if (response.ok) {
+            const data = await response.json();
+            const formater = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
+
+            document.getElementById('totalPacientesTxt').textContent = data.totalPacientes;
+            document.getElementById('pacientesHoyTxt').textContent = data.pacientesHoy;
+            document.getElementById('facturacionHoyTxt').textContent = formater.format(data.facturacionHoy);
+
+            const contenedor = document.getElementById('contenedorActividad');
+            contenedor.innerHTML = ''; 
+            
+            if(data.actividadReciente.length === 0) {
+                 contenedor.innerHTML = '<p class="text-muted small">No hay facturación reciente en esta sede.</p>';
+            } else {
+                 data.actividadReciente.forEach(item => {
+                     contenedor.innerHTML += `
+                        <div class="activity-item d-flex align-items-center justify-content-between mb-4">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle me-3 bg-light text-primary d-flex align-items-center justify-content-center border" style="width: 40px; height: 40px; font-size: 1.2rem;">
+                                    <i class="bi bi-person-check"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 fw-bold small text-dark">${item.nombre_paciente}</p>
+                                    <p class="mb-0 text-muted smaller" style="font-size: 0.75rem;">${item.descripcion}</p>
+                                </div>
+                            </div>
+                            <span class="text-success fw-bold small">${formater.format(item.total_factura)}</span>
+                        </div>
+                     `;
+                 });
+            }
+        }
+    } catch (error) {
+        console.error("Error al cargar métricas:", error);
+    }
+}
+
+// =====================================================================
+// MÓDULO DE FACTURACIÓN ELECTRÓNICA
+// =====================================================================
+document.addEventListener("DOMContentLoaded", function() {
+    const tablaEstudios = document.getElementById('tablaEstudiosCobrar');
+    const totalInput = document.getElementById('totalAPagar');
+    // Seleccionamos el botón de Guardar (el verde de la cabecera)
+    const btnGuardarFactura = document.querySelector('header .btn-success'); 
+
+    if (tablaEstudios && totalInput) {
+        // 1. Extraer los datos guardados de la Orden Virtual reciente
+        const nombre = localStorage.getItem('rado_nombre') || 'Paciente no seleccionado';
+        const documento = localStorage.getItem('rado_documento') || 'N/A';
+        const idOrden = localStorage.getItem('rado_ultima_orden_id');
+        const estudiosJson = localStorage.getItem('rado_estudios_orden_json');
+        const sedeNombre = localStorage.getItem('rado_sede_nombre') || 'Sede Principal';
+
+        // 2. Llenar los datos visuales del paciente y la clínica
+        const inputNumFactura = document.getElementById('numFactura');
+        const inputNombre = document.getElementById('nombrePacienteFac');
+        const inputDoc = document.getElementById('docPacienteFac');
+        const spanSede = document.getElementById('infoSedeFactura');
+
+        if (inputNombre) inputNombre.value = nombre;
+        if (inputDoc) inputDoc.value = documento;
+        if (inputNumFactura && idOrden) inputNumFactura.value = "ORD-00" + idOrden;
+        if (spanSede) spanSede.textContent = "Sede: " + sedeNombre;
+
+        // 3. Llenar la tabla de estudios a cobrar
+        if (estudiosJson) {
+            const estudios = JSON.parse(estudiosJson);
+            tablaEstudios.innerHTML = ''; // Limpiar el mensaje de "Use el botón para cargar..."
+
+            estudios.forEach(est => {
+                const observacionTexto = est.observacion ? est.observacion : 'N/A';
+                tablaEstudios.innerHTML += `
+                    <tr data-idestudio="${est.idEstudio}" data-observacion="${est.observacion}">
+                        <td class="small fw-bold">${est.nombre}</td>
+                        <td class="small text-muted">${observacionTexto}</td>
+                        <td>
+                            <input type="number" class="form-control form-control-sm text-end input-precio fw-bold text-primary" placeholder="Ej: 25000" min="0">
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // 4. Lógica para calcular el total automático
+        function calcularTotal() {
+            let total = 0;
+            const inputsPrecio = document.querySelectorAll('.input-precio');
+            inputsPrecio.forEach(input => {
+                const valor = parseFloat(input.value) || 0;
+                total += valor;
+            });
+            
+            // Formatear a pesos para la vista (Ej: 32,000)
+            const formater = new Intl.NumberFormat('es-CO', { minimumFractionDigits: 0 });
+            totalInput.value = formater.format(total);
+            
+            // Guardar el número crudo en un atributo oculto para enviarlo fácil al backend
+            totalInput.dataset.valorReal = total; 
+        }
+
+        // Escuchar cuando el cajero digita un precio en cualquier input de la tabla
+        tablaEstudios.addEventListener('input', function(e) {
+            if (e.target.classList.contains('input-precio')) {
+                calcularTotal();
+            }
+        });
+
+        // 5. Enviar la Factura al Backend al hacer clic en "Guardar"
+        if (btnGuardarFactura) {
+            btnGuardarFactura.addEventListener('click', async function() {
+                if (!idOrden) {
+                    alert("No hay ninguna orden activa. Vaya a 'Orden Virtual' y genere una primero.");
+                    return;
+                }
+
+                const metodoPago = document.getElementById('metodoPago').value;
+                if (!metodoPago) {
+                    alert("Por favor seleccione un Método de Pago antes de guardar.");
+                    return;
+                }
+
+                const totalFactura = parseFloat(totalInput.dataset.valorReal) || 0;
+                if (totalFactura <= 0) {
+                    alert("El Total a Pagar no puede ser cero. Asigne precios a los estudios.");
+                    return;
+                }
+
+                // Empaquetar los estudios y sus precios
+                const detallesDTO = [];
+                const filas = tablaEstudios.querySelectorAll('tr');
+                
+                filas.forEach(fila => {
+                    const idEst = fila.dataset.idestudio;
+                    const obs = fila.dataset.observacion;
+                    const precioInput = fila.querySelector('.input-precio').value;
+                    const subtotal = parseFloat(precioInput) || 0;
+
+                    // Solo guardamos los estudios que se les haya puesto un valor
+                    if (subtotal > 0) {
+                        detallesDTO.push({
+                            idEstudio: parseInt(idEst),
+                            cantidad: 1,
+                            subtotal: subtotal,
+                            observacion: obs === 'undefined' ? '' : obs
+                        });
+                    }
+                });
+
+                if (detallesDTO.length === 0) {
+                    alert("Debe asignar precio válido a los estudios.");
+                    return;
+                }
+
+                const facturacionDTO = {
+                    idOrden: parseInt(idOrden),
+                    totalFactura: totalFactura,
+                    detalles: detallesDTO
+                };
+
+                try {
+                    const response = await fetch('http://localhost:8080/api/facturacion/cobrar', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(facturacionDTO)
+                    });
+
+                    if (response.status === 201) {
+                        alert("¡Factura generada y cobrada con éxito!");
+                        
+                        // Limpiamos la memoria para que no se cobre dos veces
+                        localStorage.removeItem('rado_ultima_orden_id');
+                        localStorage.removeItem('rado_estudios_orden_json');
+                        
+                        // Redirigir al Dashboard para ver el impacto en tiempo real
+                        window.location.href = "dashboard.html";
+                    } else {
+                        const errorMsg = await response.text();
+                        alert("Error al guardar la factura: " + errorMsg);
+                    }
+                } catch (error) {
+                    console.error("Error crítico:", error);
+                    alert("Error de conexión con el servidor backend.");
+                }
+            });
+        }
     }
 });

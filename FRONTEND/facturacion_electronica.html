@@ -52,15 +52,15 @@
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label class="form-label small fw-bold text-muted"># Número de Factura</label>
-                                <input type="text" class="form-control form-control-sm bg-light fw-bold text-danger" value="0001234" readonly>
+                                <input type="text" id="numFactura" class="form-control form-control-sm bg-light fw-bold text-danger" value="Pendiente" readonly>
                             </div>
                             <div class="col-md-8">
                                 <label class="form-label small fw-bold text-muted"><i class="bi bi-person"></i> Nombre Completo del Paciente</label>
-                                <input type="text" class="form-control form-control-sm bg-light" value="Maria Gonzalez Perez" readonly>
+                                <input type="text" id="nombrePacienteFac" class="form-control form-control-sm bg-light" placeholder="Nombre del paciente" readonly>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label small fw-bold text-muted">Número de Documento</label>
-                                <input type="text" class="form-control form-control-sm bg-light" value="1234567890" readonly>
+                                <input type="text" id="docPacienteFac" class="form-control form-control-sm bg-light" placeholder="Documento" readonly>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label small fw-bold text-muted"><i class="bi bi-map"></i> Departamento</label>
@@ -78,37 +78,62 @@
                         <div class="row g-3">
                             <div class="col-12">
                                 <label class="form-label small fw-bold text-muted"><i class="bi bi-geo-alt"></i> Dirección</label>
-                                <input type="text" class="form-control form-control-sm bg-light" value="Calle, carrera, número" readonly>
+                                <input type="text" id="dirPacienteFac" class="form-control form-control-sm bg-light" placeholder="Dirección del paciente" readonly>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted"><i class="bi bi-telephone"></i> Teléfono</label>
-                                <input type="text" class="form-control form-control-sm bg-light" value="3001234567" readonly>
+                                <input type="text" id="telPacienteFac" class="form-control form-control-sm bg-light" placeholder="Teléfono" readonly>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted"><i class="bi bi-envelope"></i> Correo Electrónico</label>
-                                <input type="email" class="form-control form-control-sm bg-light" value="paciente@email.com" readonly>
+                                <input type="email" id="emailPacienteFac" class="form-control form-control-sm bg-light" placeholder="Correo electrónico" readonly>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-section-card shadow-sm p-4">
                         <h6 class="fw-bold text-primary mb-3"><i class="bi bi-credit-card me-2"></i> Información de Facturación</h6>
+                        
                         <div class="row g-3">
-                            <div class="col-12">
-                                <label class="form-label small fw-bold text-muted">Estudio a Realizar</label>
-                                <input type="text" class="form-control form-control-sm bg-light" value="Radiografía Panorámica" readonly>
+                            <!-- Botón para abrir modal de órdenes pendientes -->
+                            <div class="col-12 mb-2">
+                                <button class="btn btn-warning btn-sm fw-bold text-dark w-100" type="button" id="btnBuscarPendientes">
+                                    <i class="bi bi-search me-2"></i> Buscar Órdenes Pendientes de Hoy
+                                </button>
+                            </div>
+
+                            <!-- Tabla de estudios a cobrar -->
+                            <div class="col-12 mb-3">
+                                <label class="form-label small fw-bold text-muted">Estudios a Cobrar</label>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered align-middle">
+                                        <thead class="table-light small text-center">
+                                            <tr>
+                                                <th>Estudio</th>
+                                                <th>Observación</th>
+                                                <th width="150">Valor ($)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tablaEstudiosCobrar">
+                                            <!-- Ejemplo visual estático (JS lo llenará luego) -->
+                                            <tr>
+                                                <td class="small fw-bold text-muted text-center" colspan="3">Use el botón para cargar una orden</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold text-dark">Valor a Pagar *</label>
+                                <label class="form-label small fw-bold text-dark">Total a Pagar *</label>
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-text bg-white fw-bold text-muted">$</span>
-                                    <input type="number" class="form-control fw-bold" placeholder="0.00" style="font-size: 1.1rem; color: #2D89EF;">
+                                    <input type="text" id="totalAPagar" class="form-control fw-bold" value="0" readonly style="font-size: 1.1rem; color: #2D89EF;">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-dark">Método de Pago *</label>
-                                <select class="form-select form-select-sm fw-bold">
+                                <select class="form-select form-select-sm fw-bold" id="metodoPago">
                                     <option value="" selected disabled>Seleccione método</option>
                                     <option value="efectivo">EFECTIVO</option>
                                     <option value="consignacion">CONSIGNACIÓN/TRANSFERENCIA</option>
@@ -117,6 +142,7 @@
                                 </select>
                             </div>
                         </div>
+
                     </div>
 
                 </div>
@@ -138,7 +164,7 @@
                             </div>
                             <div class="mb-3">
                                 <small class="text-muted d-block fw-bold" style="font-size: 0.7rem;">NÚMERO DE SEDE</small>
-                                <span class="fw-bold text-dark" style="font-size: 0.9rem;">Sede #001 - Obelisco</span>
+                                <span class="fw-bold text-dark" style="font-size: 0.9rem;" id="infoSedeFactura">Seleccione en el Dashboard</span>
                             </div>
                             <div class="mb-3">
                                 <small class="text-muted d-block fw-bold" style="font-size: 0.7rem;">DIRECCIÓN DE LA SEDE</small>
@@ -163,6 +189,36 @@
         </main>
     </div>
 
+    <!-- Modal de Órdenes Pendientes (Oculto inicialmente) -->
+    <div class="modal fade" id="modalOrdenesPendientes" tabindex="-1" aria-labelledby="modalOrdenesLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-dark" id="modalOrdenesLabel"><i class="bi bi-card-list me-2"></i> Órdenes Pendientes de Hoy</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light small">
+                                <tr>
+                                    <th># Orden</th>
+                                    <th>Paciente</th>
+                                    <th>Documento</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaOrdenesPendientes">
+                                <!-- JS inyectará las filas aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
