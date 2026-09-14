@@ -196,9 +196,9 @@ document.addEventListener("DOMContentLoaded", function() {
                         }
                         document.getElementById('nomPaciente').value = paciente.nombrePaciente;
                         document.getElementById('fechaNacimiento').value = paciente.fechaNacimientoPaciente;
-                        document.getElementById('dirPaciente').value = paciente.direccionPaciente;
-                        document.getElementById('telPaciente').value = paciente.telefonoPaciente;
-                        document.getElementById('emailPaciente').value = paciente.emailPaciente;
+                        document.getElementById('dirPaciente').value = paciente.direccionPaciente || '';
+                        document.getElementById('telPaciente').value = paciente.telefonoPaciente || '';
+                        document.getElementById('emailPaciente').value = paciente.emailPaciente || '';
                         
                         if(paciente.sexo) {
                             const selectGenero = document.getElementById('generoPaciente');
@@ -320,10 +320,22 @@ function guardarDatosMemoria() {
         localStorage.setItem('rado_idPaciente', idOculto.value);
     }
     
+    // Guardar nombre, documento y fecha
     localStorage.setItem('rado_nombre', document.getElementById('nomPaciente').value);
     localStorage.setItem('rado_documento', document.getElementById('docPaciente').value);
     localStorage.setItem('rado_fechaNac', document.getElementById('fechaNacimiento').value);
     
+    // --- NUEVAS LÍNEAS AGREGADAS PARA LA FACTURACIÓN ---
+    const direccion = document.getElementById('dirPaciente');
+    if(direccion) localStorage.setItem('rado_direccion', direccion.value || 'No registrada');
+
+    const telefono = document.getElementById('telPaciente');
+    if(telefono) localStorage.setItem('rado_telefono', telefono.value || 'No registrado');
+
+    const correo = document.getElementById('emailPaciente');
+    if(correo) localStorage.setItem('rado_correo', correo.value || 'No registrado');
+    // ---------------------------------------------------
+
     const genero = document.getElementById('generoPaciente');
     if(genero) localStorage.setItem('rado_sexo', genero.value);
 
@@ -610,6 +622,10 @@ document.addEventListener("DOMContentLoaded", function() {
         // 1. Extraer los datos guardados de la Orden Virtual reciente
         const nombre = localStorage.getItem('rado_nombre') || 'Paciente no seleccionado';
         const documento = localStorage.getItem('rado_documento') || 'N/A';
+        const direccion = localStorage.getItem('rado_direccion') || '';
+        const telefono = localStorage.getItem('rado_telefono') || '';
+        const correo = localStorage.getItem('rado_correo') || '';
+        
         const idOrden = localStorage.getItem('rado_ultima_orden_id');
         const estudiosJson = localStorage.getItem('rado_estudios_orden_json');
         const sedeNombre = localStorage.getItem('rado_sede_nombre') || 'Sede Principal';
@@ -619,16 +635,24 @@ document.addEventListener("DOMContentLoaded", function() {
         const inputNombre = document.getElementById('nombrePacienteFac');
         const inputDoc = document.getElementById('docPacienteFac');
         const spanSede = document.getElementById('infoSedeFactura');
+        
+        // Elementos de contacto
+        const inputDireccion = document.getElementById('dirPacienteFac'); 
+        const inputTelefono = document.getElementById('telPacienteFac');
+        const inputCorreo = document.getElementById('emailPacienteFac');
 
         if (inputNombre) inputNombre.value = nombre;
         if (inputDoc) inputDoc.value = documento;
+        if (inputDireccion) inputDireccion.value = direccion;
+        if (inputTelefono) inputTelefono.value = telefono;
+        if (inputCorreo) inputCorreo.value = correo;
         if (inputNumFactura && idOrden) inputNumFactura.value = "ORD-00" + idOrden;
         if (spanSede) spanSede.textContent = "Sede: " + sedeNombre;
 
         // 3. Llenar la tabla de estudios a cobrar
         if (estudiosJson) {
             const estudios = JSON.parse(estudiosJson);
-            tablaEstudios.innerHTML = ''; // Limpiar el mensaje de "Use el botón para cargar..."
+            tablaEstudios.innerHTML = ''; // Limpiar el mensaje inicial
 
             estudios.forEach(est => {
                 const observacionTexto = est.observacion ? est.observacion : 'N/A';
@@ -653,15 +677,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 total += valor;
             });
             
-            // Formatear a pesos para la vista (Ej: 32,000)
+            // Formatear a pesos para la vista
             const formater = new Intl.NumberFormat('es-CO', { minimumFractionDigits: 0 });
             totalInput.value = formater.format(total);
             
-            // Guardar el número crudo en un atributo oculto para enviarlo fácil al backend
+            // Guardar el número crudo en un atributo oculto para enviarlo al backend
             totalInput.dataset.valorReal = total; 
         }
 
-        // Escuchar cuando el cajero digita un precio en cualquier input de la tabla
+        // Escuchar cuando el cajero digita un precio
         tablaEstudios.addEventListener('input', function(e) {
             if (e.target.classList.contains('input-precio')) {
                 calcularTotal();
@@ -698,7 +722,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     const precioInput = fila.querySelector('.input-precio').value;
                     const subtotal = parseFloat(precioInput) || 0;
 
-                    // Solo guardamos los estudios que se les haya puesto un valor
+                    // Solo guardamos los estudios con valor
                     if (subtotal > 0) {
                         detallesDTO.push({
                             idEstudio: parseInt(idEst),
@@ -730,11 +754,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (response.status === 201) {
                         alert("¡Factura generada y cobrada con éxito!");
                         
-                        // Limpiamos la memoria para que no se cobre dos veces
+                        // Limpiamos la memoria
                         localStorage.removeItem('rado_ultima_orden_id');
                         localStorage.removeItem('rado_estudios_orden_json');
+                        localStorage.removeItem('rado_direccion');
+                        localStorage.removeItem('rado_telefono');
+                        localStorage.removeItem('rado_correo');
                         
-                        // Redirigir al Dashboard para ver el impacto en tiempo real
+                        // Redirigir al Dashboard
                         window.location.href = "dashboard.html";
                     } else {
                         const errorMsg = await response.text();
