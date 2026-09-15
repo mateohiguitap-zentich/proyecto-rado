@@ -386,7 +386,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // =====================================================================
-// GUARDAR ORDEN E IMPRIMIR / GUARDAR COMO PDF (NATIVO / HTML2PDF)
+// GUARDAR ORDEN Y MOSTRAR VENTANA EMERGENTE PARA IMPRESIÓN (MVP)
 // =====================================================================
 document.addEventListener("DOMContentLoaded", function() {
     const formOrden = document.querySelector('form'); 
@@ -420,7 +420,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             const odontologo = document.getElementById('odontologoOrden').value.trim() || "N/A";
             const correo = document.getElementById('correoOdontologoOrden').value.trim() || "N/A";
-            const formatoEntrega = document.querySelector('.form-select').value || "No especificado";
+            const formatoEntrega = document.getElementById('formatoEntregaOrden') ? document.getElementById('formatoEntregaOrden').value : "No especificado";
 
             const descripcionFinal = `Estudios: ${descripcionNombres.join(", ")} | Odontólogo: ${odontologo} | Correo: ${correo} | Formato: ${formatoEntrega}`;
 
@@ -447,55 +447,45 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (response.status === 201) {
                     const ordenGuardada = await response.json();
                     
+                    // Guardamos en memoria para la factura
                     localStorage.setItem('rado_estudios_orden_json', JSON.stringify(listaEstudiosEstructurada));
                     localStorage.setItem('rado_ultima_orden_id', ordenGuardada.idOrden);
 
-                    // Mensaje de éxito para confirmar que en MySQL todo está OK
-                    alert("¡Orden guardada con éxito! Generando PDF...");
+                    // =========================================================
+                    // NUEVA LÓGICA: LLENAR Y MOSTRAR LA VENTANA EMERGENTE
+                    // =========================================================
+                    
+                    // 1. Llenar textos básicos
+                    document.getElementById('modalOrdenId').textContent = "ORD-00" + ordenGuardada.idOrden;
+                    document.getElementById('modalPacienteNombre').textContent = document.getElementById('nombreOrden').value || "No especificado";
+                    document.getElementById('modalPacienteDoc').textContent = document.getElementById('docOrden').value || "No especificado";
+                    
+                    // Capturamos los nuevos datos (Asegúrate de que estos IDs coincidan con tu HTML)
+                    const inputFechaNac = document.getElementById('fechaNacOrden'); // Ajusta el ID si es diferente en tu HTML
+                    const inputEdad = document.getElementById('edadOrden'); // Ajusta el ID si es diferente en tu HTML
+                    
+                    document.getElementById('modalPacienteFecNac').textContent = inputFechaNac && inputFechaNac.value ? inputFechaNac.value : "No especificada";
+                    document.getElementById('modalPacienteEdad').textContent = inputEdad && inputEdad.value ? inputEdad.value : "Sin edad";
+                    
+                    document.getElementById('modalOdontologo').textContent = odontologo;
+                    document.getElementById('modalCorreoOdonto').textContent = correo;
+                    document.getElementById('modalFormato').textContent = formatoEntrega;
+                    
+                    // Fecha actual
+                    const hoy = new Date();
+                    document.getElementById('modalFecha').textContent = hoy.toLocaleDateString();
 
-                    if (typeof html2pdf !== 'undefined') {
-                        const sidebar = document.querySelector('.sidebar');
-                        const headerActions = document.querySelector('.header-actions');
-                        const footerButtons = document.querySelector('.d-flex.justify-content-end.mt-4');
-                        const iconos = document.querySelectorAll('#contenedorEstudios i');
+                    // 2. Llenar la lista de estudios dinámicamente
+                    const listaHtml = document.getElementById('modalListaEstudios');
+                    listaHtml.innerHTML = '';
+                    listaEstudiosEstructurada.forEach(est => {
+                        let obs = est.observacion ? ` <small class="text-muted fst-italic">(${est.observacion})</small>` : '';
+                        listaHtml.innerHTML += `<li class="list-group-item py-1 small"><i class="bi bi-check2-square me-2 text-success"></i> ${est.nombre}${obs}</li>`;
+                    });
 
-                        if(sidebar) sidebar.style.display = 'none';
-                        if(headerActions) headerActions.style.display = 'none';
-                        if(footerButtons) footerButtons.style.display = 'none';
-                        iconos.forEach(el => el.style.display = 'none');
-
-                        const elementoAImprimir = document.querySelector('.content-area');
-                        const docNum = document.getElementById('docOrden') ? document.getElementById('docOrden').value : '000';
-                        
-                        html2pdf().set({
-                            margin: 0.5,
-                            filename: `Orden_Virtual_${docNum}.pdf`,
-                            image: { type: 'jpeg', quality: 0.98 },
-                            html2canvas: { scale: 2 },
-                            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-                        }).from(elementoAImprimir).save().then(() => {
-                            
-                            // LA MAGIA: Esperamos 2 segundos para que el navegador descargue el archivo antes de cambiar de página
-                            setTimeout(() => {
-                                // Restaurar vista por si acaso
-                                if(sidebar) sidebar.style.display = '';
-                                if(headerActions) headerActions.style.display = '';
-                                if(footerButtons) headerActions.style.display = '';
-                                iconos.forEach(el => el.style.display = '');
-
-                                window.location.href = "facturacion_electronica.html";
-                            }, 2000);
-
-                        }).catch(err => {
-                            console.error("Fallo al generar el PDF de fondo: ", err);
-                            window.location.href = "facturacion_electronica.html";
-                        });
-
-                    } else {
-                        console.warn("Librería PDF no detectada. Usando modo de impresión nativo.");
-                        window.print();
-                        window.location.href = "facturacion_electronica.html";
-                    }
+                    // 3. Mostrar el Modal (Ventana Emergente) de Bootstrap
+                    const modal = new bootstrap.Modal(document.getElementById('modalImpresionOrden'));
+                    modal.show();
 
                 } else {
                     const errorMsg = await response.text();
@@ -576,10 +566,22 @@ async function cargarMetricasDashboard(idSede) {
             const data = await response.json();
             const formater = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
 
+            // 1. Cargar las tarjetas numéricas superiores
             document.getElementById('totalPacientesTxt').textContent = data.totalPacientes;
             document.getElementById('pacientesHoyTxt').textContent = data.pacientesHoy;
             document.getElementById('facturacionHoyTxt').textContent = formater.format(data.facturacionHoy);
 
+            // 2. --- MAGIA DE LA GRÁFICA: ACTUALIZAR CHART.JS ---
+            const chartExistente = Chart.getChart('graficoPacientes');
+            if (chartExistente && data.pacientesPorDia) {
+                // Inyectamos el arreglo que llegó de la base de datos MySQL
+                chartExistente.data.datasets[0].data = data.pacientesPorDia;
+                // Le ordenamos a la gráfica redibujarse con los nuevos picos
+                chartExistente.update(); 
+            }
+            // ---------------------------------------------------
+
+            // 3. Cargar la lista de actividad reciente (facturas)
             const contenedor = document.getElementById('contenedorActividad');
             contenedor.innerHTML = ''; 
             
@@ -773,5 +775,86 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
         }
+    }
+});
+
+// =====================================================================
+// GRÁFICO DINÁMICO DE PACIENTES ATENDIDOS (CHART.JS)
+// =====================================================================
+document.addEventListener("DOMContentLoaded", function() {
+    const ctx = document.getElementById('graficoPacientes');
+    
+    if (ctx) {
+        // 1. Calcular dinámicamente los nombres de los últimos 7 días
+        const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+        const etiquetasDias = [];
+        
+        for (let i = 6; i >= 0; i--) {
+            const fecha = new Date();
+            fecha.setDate(fecha.getDate() - i);
+            etiquetasDias.push(diasSemana[fecha.getDay()]);
+        }
+
+        // 2. Iniciar la gráfica con las etiquetas calculadas
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: etiquetasDias, // <-- Se inyectan los días dinámicos aquí
+                datasets: [{
+                    label: 'Pacientes',
+                    data: [], // <-- Nace vacío, el fetch de Spring Boot lo llenará
+                    borderColor: '#2D89EF', 
+                    backgroundColor: 'rgba(45, 137, 239, 0.15)', 
+                    borderWidth: 3,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#2D89EF',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: true, 
+                    tension: 0.4 
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }, 
+                    tooltip: {
+                        backgroundColor: '#2D89EF',
+                        titleFont: { family: 'Poppins', size: 13 },
+                        bodyFont: { family: 'Poppins', size: 14, weight: 'bold' },
+                        padding: 12,
+                        displayColors: false, 
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' atendidos';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawBorder: false,
+                            color: '#f0f0f0', 
+                        },
+                        ticks: {
+                            font: { family: 'Poppins', size: 11 },
+                            color: '#a0a0a0',
+                            stepSize: 1 // <-- Ajustado a 1 para visualizar mejor números pequeños
+                        }
+                    },
+                    x: {
+                        grid: { display: false }, 
+                        ticks: {
+                            font: { family: 'Poppins', size: 12 },
+                            color: '#6c757d'
+                        }
+                    }
+                }
+            }
+        });
     }
 });

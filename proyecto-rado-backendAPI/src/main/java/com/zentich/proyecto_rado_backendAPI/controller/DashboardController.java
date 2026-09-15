@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList; // ¡Importante para la lista de la gráfica!
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,11 +37,22 @@ public class DashboardController {
         String sqlActividad = "SELECT p.nombre_paciente, o.descripcion, f.total_factura FROM factura f JOIN orden_servicio o ON f.id_orden = o.id_orden JOIN paciente p ON o.id_paciente = p.id_paciente WHERE o.id_sede = ? ORDER BY f.fecha_factura DESC LIMIT 3";
         List<Map<String, Object>> actividad = jdbcTemplate.queryForList(sqlActividad, idSede);
 
+        // 5. Histórico de pacientes últimos 7 días (Para la gráfica)
+        List<Integer> pacientesPorDia = new ArrayList<>();
+        String sqlPorDia = "SELECT COUNT(DISTINCT id_paciente) FROM orden_servicio WHERE id_sede = ? AND DATE(fecha_orden) = DATE_SUB(CURDATE(), INTERVAL ? DAY)";
+        
+        // Hacemos un bucle que retrocede desde hace 6 días (i=6) hasta hoy (i=0)
+        for (int i = 6; i >= 0; i--) {
+            Integer count = jdbcTemplate.queryForObject(sqlPorDia, Integer.class, idSede, i);
+            pacientesPorDia.add(count != null ? count : 0);
+        }
+
         // Empaquetar y enviar al Frontend
         metricas.put("totalPacientes", totalPacientes != null ? totalPacientes : 0);
         metricas.put("pacientesHoy", pacientesHoy != null ? pacientesHoy : 0);
         metricas.put("facturacionHoy", facturacionHoy != null ? facturacionHoy : 0.0);
         metricas.put("actividadReciente", actividad);
+        metricas.put("pacientesPorDia", pacientesPorDia); // <-- ¡Aquí inyectamos el arreglo!
 
         return metricas;
     }
