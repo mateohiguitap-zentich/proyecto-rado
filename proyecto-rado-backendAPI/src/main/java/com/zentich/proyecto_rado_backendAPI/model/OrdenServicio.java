@@ -30,6 +30,9 @@ public class OrdenServicio {
     @Column(name = "descripcion", length = 255)
     private String descripcion;
 
+    @Column(name = "odontologo_remitente", length = 150)
+    private String odontologoRemitente;
+
     @PrePersist
     protected void onCreate() {
         this.fechaOrden = new Date();
@@ -51,4 +54,6 @@ public class OrdenServicio {
     public void setIdSede(Integer idSede) { this.idSede = idSede; }
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public String getOdontologoRemitente() { return odontologoRemitente; }
+    public void setOdontologoRemitente(String odontologoRemitente) { this.odontologoRemitente = odontologoRemitente; }
 }

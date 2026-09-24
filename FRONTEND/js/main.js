@@ -1,4 +1,28 @@
 // =====================================================================
+// GUARDIÁN DE SESIÓN Y DATOS DEL USUARIO ACTIVO
+// =====================================================================
+document.addEventListener("DOMContentLoaded", function() {
+    const rutaActual = window.location.pathname.toLowerCase();
+    // Evitamos que el guardián actúe si estamos en la página de Login
+    const esPaginaLogin = rutaActual.includes('index.html') || rutaActual.endsWith('/');
+
+    const nombreUsuarioActivo = localStorage.getItem('rado_usuario_nombre');
+    
+    // Si no hay usuario en memoria y NO estamos en el login, lo expulsamos
+    if (!nombreUsuarioActivo && !esPaginaLogin) {
+        alert("Sesión no válida. Por favor inicie sesión.");
+        window.location.href = "index.html";
+        return;
+    }
+
+    // Mostrar el nombre del usuario en la parte superior (si existe el contenedor en el HTML)
+    const displayElement = document.getElementById('displayNombreUsuario');
+    if (displayElement && nombreUsuarioActivo) {
+        displayElement.textContent = nombreUsuarioActivo;
+    }
+});
+
+// =====================================================================
 // CALCULAR EDAD SEGÚN LA FECHA DE NACIMIENTO
 // =====================================================================
 document.addEventListener("DOMContentLoaded", function() {
@@ -154,6 +178,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     alert("¡Éxito! Paciente " + data.nombrePaciente + " registrado en el Sistema RADO.");
                     
                     guardarDatosMemoria(); 
+                    localStorage.setItem('rado_idPaciente', data.idPaciente);
+
                     window.location.href = "orden_virtual.html";
                 } else {
                     const errorMessage = await response.text();
@@ -421,8 +447,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const odontologo = document.getElementById('odontologoOrden').value.trim() || "N/A";
             const correo = document.getElementById('correoOdontologoOrden').value.trim() || "N/A";
             const formatoEntrega = document.getElementById('formatoEntregaOrden') ? document.getElementById('formatoEntregaOrden').value : "No especificado";
-
-            const descripcionFinal = `Estudios: ${descripcionNombres.join(", ")} | Odontólogo: ${odontologo} | Correo: ${correo} | Formato: ${formatoEntrega}`;
+            const descripcionFinal = descripcionNombres.join(", ");
 
             let idSedeActual = localStorage.getItem('rado_sede_id');
             if(!idSedeActual) {
@@ -434,7 +459,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 idPaciente: localStorage.getItem('rado_idPaciente') || 0,
                 idUsuario: 1, 
                 idSede: parseInt(idSedeActual),
-                descripcion: descripcionFinal
+                descripcion: descripcionFinal,
+                odontologoRemitente: odontologo
             };
 
             try {
@@ -460,9 +486,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.getElementById('modalPacienteNombre').textContent = document.getElementById('nombreOrden').value || "No especificado";
                     document.getElementById('modalPacienteDoc').textContent = document.getElementById('docOrden').value || "No especificado";
                     
-                    // Capturamos los nuevos datos (Asegúrate de que estos IDs coincidan con tu HTML)
-                    const inputFechaNac = document.getElementById('fechaNacOrden'); // Ajusta el ID si es diferente en tu HTML
-                    const inputEdad = document.getElementById('edadOrden'); // Ajusta el ID si es diferente en tu HTML
+                    // Capturamos los nuevos datos
+                    const inputFechaNac = document.getElementById('fechaNacOrden'); 
+                    const inputEdad = document.getElementById('edadOrden'); 
                     
                     document.getElementById('modalPacienteFecNac').textContent = inputFechaNac && inputFechaNac.value ? inputFechaNac.value : "No especificada";
                     document.getElementById('modalPacienteEdad').textContent = inputEdad && inputEdad.value ? inputEdad.value : "Sin edad";
@@ -743,6 +769,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const facturacionDTO = {
                     idOrden: parseInt(idOrden),
                     totalFactura: totalFactura,
+                    metodoPago: metodoPago,
                     detalles: detallesDTO
                 };
 
@@ -843,7 +870,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         ticks: {
                             font: { family: 'Poppins', size: 11 },
                             color: '#a0a0a0',
-                            stepSize: 1 // <-- Ajustado a 1 para visualizar mejor números pequeños
+                            stepSize: 1
                         }
                     },
                     x: {
@@ -856,5 +883,168 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
         });
+    }
+});
+
+// =====================================================================
+// FUNCIÓN PARA CERRAR SESIÓN DE FORMA SEGURA
+// =====================================================================
+function cerrarSesion() {
+    // Borramos toda la memoria de seguridad del navegador
+    localStorage.removeItem('rado_rol');
+    localStorage.removeItem('rado_usuario_nombre');
+    
+    // Lo enviamos al login
+    window.location.href = "index.html";
+}
+
+// =====================================================================
+// MÓDULO DE GENERACIÓN DE REPORTES Y EXPORTACIÓN A EXCEL
+// =====================================================================
+document.addEventListener("DOMContentLoaded", function() {
+    const btnPrevisualizar = document.getElementById('btnPrevisualizar');
+    const btnExportar = document.getElementById('btnExportar');
+    
+    // Verificamos si estamos en la página de reportes
+    if (btnPrevisualizar) {
+        const selectTipo = document.getElementById('tipoReporte');
+        const inputInicio = document.getElementById('fechaInicio');
+        const inputFin = document.getElementById('fechaFin');
+        
+        const estadoVacio = document.getElementById('estadoVacio');
+        const tablaResultados = document.getElementById('tablaResultados');
+        const cabeceraReporte = document.getElementById('cabeceraReporte');
+        const cuerpoReporte = document.getElementById('cuerpoReporte');
+        const contadorRegistros = document.getElementById('contadorRegistros');
+
+        // 1. LÓGICA DE PREVISUALIZAR
+        btnPrevisualizar.addEventListener('click', async function() {
+            const tipo = selectTipo.value;
+            const fechaInicio = inputInicio.value;
+            const fechaFin = inputFin.value;
+
+            // Validación 1: Campos vacíos
+            if (!tipo || !fechaInicio || !fechaFin) {
+                return alert("⚠️ Por favor, seleccione el tipo de reporte y el rango completo de fechas.");
+            }
+
+            // Validación 2: EL ESCUDO CONTRA FECHAS INVERTIDAS
+            if (fechaInicio > fechaFin) {
+                return alert("❌ Error: La Fecha de Inicio no puede ser mayor que la Fecha Final.");
+            }
+
+            // Ocultamos el estado vacío y preparamos la tabla
+            estadoVacio.style.display = 'none';
+            tablaResultados.style.display = 'block';
+            btnExportar.style.display = 'none'; // Se oculta hasta que carguen los datos
+            
+            cabeceraReporte.innerHTML = '';
+            cuerpoReporte.innerHTML = '<tr><td colspan="10" class="text-center py-5"><div class="spinner-border text-primary" role="status"></div><p class="mt-2 text-muted">Consultando la base de datos...</p></td></tr>';
+            contadorRegistros.innerHTML = '';
+
+            try {
+                // LLAMADA REAL A LA API DE SPRING BOOT
+                const response = await fetch(`http://localhost:8080/api/reportes/${tipo}?inicio=${fechaInicio}&fin=${fechaFin}`);
+                
+                if (!response.ok) throw new Error("Error en el servidor");
+                
+                const datosReales = await response.json();
+
+                // DIBUJAR LAS TABLAS CON LOS DATOS DE MYSQL
+                if (tipo === 'consolidado') {
+                    dibujarTablaConsolidado(datosReales);
+                } else if (tipo === 'facturacion') {
+                    dibujarTablaFacturacion(datosReales);
+                }
+
+                // MOSTRAR BOTÓN EXPORTAR SI HAY DATOS
+                if (datosReales.length > 0) {
+                    btnExportar.style.display = 'inline-flex';
+                    contadorRegistros.innerHTML = `Mostrando <strong>${datosReales.length}</strong> registros encontrados.`;
+                } else {
+                    cuerpoReporte.innerHTML = '<tr><td colspan="10" class="text-center py-4 text-muted">No se encontraron registros en este rango de fechas.</td></tr>';
+                }
+
+            } catch (error) {
+                console.error("Error al cargar el reporte:", error);
+                cuerpoReporte.innerHTML = '<tr><td colspan="10" class="text-center text-danger fw-bold py-4">Error de conexión con el servidor.</td></tr>';
+            }
+            
+        });
+
+        // 2. LÓGICA DE EXPORTAR A EXCEL (SheetJS)
+        btnExportar.addEventListener('click', function() {
+            const tablaElement = document.getElementById('tablaReporteFinal');
+            
+            // Convertimos la tabla HTML a un libro de Excel
+            const workbook = XLSX.utils.table_to_book(tablaElement, { sheet: "Reporte" });
+            
+            // Generamos el nombre del archivo dinámico
+            const nombreReporte = selectTipo.options[selectTipo.selectedIndex].text.replace(/ /g, '_');
+            const fechaTxt = inputInicio.value.replace(/-/g, '');
+            const nombreArchivo = `RADO_${nombreReporte}_${fechaTxt}.xlsx`;
+            
+            // Forzamos la descarga
+            XLSX.writeFile(workbook, nombreArchivo);
+        });
+
+        // ==========================================
+        // FUNCIONES DIBUJANTES DE TABLAS
+        // ==========================================
+        const formater = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
+
+        function dibujarTablaConsolidado(datos) {
+            cabeceraReporte.innerHTML = `
+                <tr>
+                    <th>Sede</th>
+                    <th>Método de Pago</th>
+                    <th class="text-end">Valor Total Agrupado</th>
+                </tr>`;
+            
+            cuerpoReporte.innerHTML = '';
+            datos.forEach(d => {
+                cuerpoReporte.innerHTML += `
+                    <tr>
+                        <td class="fw-bold text-dark"><i class="bi bi-geo-alt text-primary me-1"></i> ${d.sede}</td>
+                        <td><span class="badge bg-secondary bg-opacity-10 text-secondary border">${d.metodoPago || 'NO REGISTRA'}</span></td>
+                        <!-- Aquí agregamos data-v y data-t para que exporte el número limpio a Excel -->
+                        <td class="text-end text-success fw-bold" data-v="${d.total}" data-t="n">${formater.format(d.total)}</td>
+                    </tr>`;
+            });
+        }
+
+        function dibujarTablaFacturacion(datos) {
+            cabeceraReporte.innerHTML = `
+                <tr>
+                    <th>Fecha</th>
+                    <th>Documento</th>
+                    <th>Nombre Paciente</th>
+                    <th>Convenio</th>
+                    <th>Referido Por</th>
+                    <th>Factura</th>
+                    <th>Descripción</th>
+                    <th>Método Pago</th>
+                    <th>Sede</th>
+                    <th class="text-end">Valor</th>
+                </tr>`;
+            
+            cuerpoReporte.innerHTML = '';
+            datos.forEach(d => {
+                cuerpoReporte.innerHTML += `
+                    <tr>
+                        <td class="text-muted">${d.fecha}</td>
+                        <td class="text-muted">${d.idPaciente}</td>
+                        <td class="fw-bold">${d.nombre}</td>
+                        <td>${d.convenio}</td>
+                        <td class="fst-italic text-muted">${d.referido || 'No Registra'}</td>
+                        <td class="font-monospace text-primary fw-bold">${d.factura}</td>
+                        <td class="small">${d.descripcion}</td>
+                        <td>${d.metodoPago || 'NO REGISTRA'}</td>
+                        <td>${d.sede}</td>
+                        <!-- Aquí agregamos data-v y data-t para que exporte el número limpio a Excel -->
+                        <td class="text-end text-success fw-bold" data-v="${d.valor}" data-t="n">${formater.format(d.valor)}</td>
+                    </tr>`;
+            });
+        }
     }
 });

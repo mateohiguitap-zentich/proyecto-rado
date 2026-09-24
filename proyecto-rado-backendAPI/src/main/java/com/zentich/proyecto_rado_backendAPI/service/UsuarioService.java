@@ -13,16 +13,17 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public boolean autenticarUsuario(LoginDTO loginDto) {
+    public Usuario autenticarUsuario(LoginDTO loginDto) {
         // 1. Buscamos el usuario en la BD por nombreUsuario
         Optional<Usuario> usuarioOpt = usuarioRepository.findByNombreUsuario(loginDto.getUsuario());
         
-        // 2. Si existe, validamos la contraseña usando getContrasenaUsuario()
+        // 2. Si existe, validamos la contraseña
         if (usuarioOpt.isPresent()) {
             Usuario usuarioFisico = usuarioOpt.get();
-            return usuarioFisico.getContrasenaUsuario().equals(loginDto.getPassword());
+            if (usuarioFisico.getContrasenaUsuario().equals(loginDto.getPassword())) {
+                return usuarioFisico; // Devolvemos el usuario completo
+            }
         }
-        
-        return false; // El usuario no existe o la clave es incorrecta
+        return null; // Devuelve nulo si la clave es mala o no existe
     }
 }

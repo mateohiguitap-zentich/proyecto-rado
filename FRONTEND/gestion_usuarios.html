@@ -12,26 +12,7 @@
 </head>
 <body class="bg-light">
 
-    <div class="modal fade" id="modalSeguridad" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
-                <div class="modal-header bg-primary text-white" style="border-radius: 20px 20px 0 0;">
-                    <h5 class="modal-title fw-bold"><i class="bi bi-shield-lock-fill me-2"></i> Acceso Restringido</h5>
-                </div>
-                <div class="modal-body p-4 text-center">
-                    <p class="text-muted mb-4">Esta sección requiere privilegios de Administrador. Por favor, ingrese su clave maestra para continuar.</p>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text bg-white"><i class="bi bi-key text-primary"></i></span>
-                        <input type="password" id="claveAdmin" class="form-control" placeholder="Clave de Administrador (ej: admin123)">
-                    </div>
-                    <div id="errorClave" class="text-danger small fw-bold mb-3" style="display: none;">Clave incorrecta. Intente de nuevo.</div>
-                    <button class="btn btn-primary w-100 fw-bold py-2" id="btnVerificarClave">Verificar Acceso</button>
-                    <a href="dashboard.html" class="btn btn-light w-100 mt-2 text-muted fw-bold">Volver al Dashboard</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- Modal de Confirmación de Eliminación (Se mantiene para seguridad extra) -->
     <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
@@ -52,7 +33,8 @@
         </div>
     </div>
 
-    <div class="main-wrapper" id="contenidoPrincipal" style="display: none; filter: blur(5px);">
+    <!-- Contenido Principal (Nace oculto por seguridad) -->
+    <div class="main-wrapper" id="contenidoPrincipal" style="display: none;">
         
         <nav class="sidebar">
             <div class="sidebar-header">
@@ -63,11 +45,13 @@
                 <li class="nav-item"><a href="registro_paciente.html" class="nav-link"><i class="bi bi-person-badge"></i> REGISTRO DE PACIENTE</a></li>
                 <li class="nav-item"><a href="orden_virtual.html" class="nav-link"><i class="bi bi-file-earmark-medical"></i> ORDEN VIRTUAL</a></li>
                 <li class="nav-item"><a href="facturacion_electronica.html" class="nav-link"><i class="bi bi-receipt"></i> FACTURA ELECTRÓNICA</a></li>
-                <li class="nav-item"><a href="reportes.html" class="nav-link"><i class="bi bi-bar-chart-line"></i> GENERAR REPORTE</a></li>
+                <li class="nav-item"><a href="generar_reporte.html" class="nav-link"><i class="bi bi-bar-chart-line"></i> GENERAR REPORTE</a></li>
                 <li class="nav-item"><a href="gestion_usuarios.html" class="nav-link active"><i class="bi bi-people"></i> GESTIÓN DE USUARIO</a></li>
             </ul>
             <div class="sidebar-footer">
-                <a href="index.html" class="text-white text-decoration-none small"><i class="bi bi-box-arrow-left"></i> SALIR DEL SISTEMA</a>
+                <a href="#" onclick="cerrarSesion()" class="text-white text-decoration-none small">
+                    <i class="bi bi-box-arrow-left"></i> SALIR DEL SISTEMA
+                </a>
             </div>
         </nav>
 
@@ -77,26 +61,50 @@
             </header>
 
             <ul class="nav nav-tabs custom-tabs" id="userTabs" role="tablist">
+                <!-- NUEVA PESTAÑA: Listar -->
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" style="color: #2D89EF !important; font-weight: bold; background: transparent;" data-bs-toggle="tab" data-bs-target="#registrar" type="button" role="tab">Registrar Usuario</button>
+                    <button class="nav-link active" style="color: #198754 !important; font-weight: bold; background: transparent;" data-bs-toggle="tab" data-bs-target="#listar" type="button" role="tab"><i class="bi bi-list-ul"></i> Listar Usuarios</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" style="color: #475569 !important; font-weight: bold; background: transparent;" data-bs-toggle="tab" data-bs-target="#editar" type="button" role="tab">Editar Usuario</button>
+                    <button class="nav-link" style="color: #2D89EF !important; font-weight: bold; background: transparent;" data-bs-toggle="tab" data-bs-target="#registrar" type="button" role="tab">Registrar</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link text-danger" style="color: #dc3545 !important; font-weight: bold; background: transparent;" data-bs-toggle="tab" data-bs-target="#eliminar" type="button" role="tab">Eliminar Usuario</button>
+                    <button class="nav-link" style="color: #475569 !important; font-weight: bold; background: transparent;" data-bs-toggle="tab" data-bs-target="#editar" type="button" role="tab">Editar</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link text-danger" style="color: #dc3545 !important; font-weight: bold; background: transparent;" data-bs-toggle="tab" data-bs-target="#eliminar" type="button" role="tab">Eliminar</button>
                 </li>
             </ul>
 
             <div class="tab-content bg-white p-4 p-md-5 rounded-bottom shadow-sm border border-top-0" id="userTabsContent" style="max-width: 800px;">
                 
-                <div class="tab-pane fade show active" id="registrar" role="tabpanel">
+                <!-- 1. CONTENEDOR DE LA TABLA (Activo por defecto) -->
+                <div class="tab-pane fade show active" id="listar" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle text-center">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Usuario / Documento</th>
+                                    <th>Contraseña</th>
+                                    <th>Rol Asignado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaUsuariosBody">
+                                <tr><td colspan="4" class="text-muted">Cargando usuarios desde la base de datos...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 2. PESTAÑA REGISTRAR -->
+                <div class="tab-pane fade" id="registrar" role="tabpanel">
                     <form class="row g-4">
                         <div class="col-12">
-                            <label class="form-label small text-muted fw-bold">Número de documento</label>
+                            <label class="form-label small text-muted fw-bold">NOMBRE USUARIO</label>
                             <div class="input-group shadow-sm">
                                 <span class="input-group-text bg-light"><i class="bi bi-file-earmark-text text-muted"></i></span>
-                                <input type="text" class="form-control bg-light" placeholder="Ingrese el número de documento">
+                                <input type="text" class="form-control bg-light" placeholder="Ingrese el nombre de usuario">
                             </div>
                         </div>
                         <div class="col-12">
@@ -121,26 +129,27 @@
                                 <span class="input-group-text bg-light"><i class="bi bi-person text-muted"></i></span>
                                 <select class="form-select bg-light text-muted">
                                     <option value="" selected disabled>Seleccione un rol</option>
-                                    <option value="admin">Administrador</option>
-                                    <option value="odontologo">Técnico RX</option>
-                                    <option value="recepcion">Recepcionista / Cajero</option>
+                                    <option value="Administrador">Administrador</option>
+                                    <option value="Tecnico">Técnico RX</option>
+                                    <option value="Recepcionista">Recepcionista / Cajero</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-12 d-flex justify-content-between mt-5">
                             <button type="button" class="btn btn-primary w-50 me-2 py-2 fw-bold shadow-sm">Guardar</button>
-                            <button type="button" class="btn btn-secondary w-50 ms-2 py-2 fw-bold shadow-sm">Salir</button>
+                            <button type="button" class="btn btn-secondary w-50 ms-2 py-2 fw-bold shadow-sm">Limpiar</button>
                         </div>
                     </form>
                 </div>
 
+                <!-- 3. PESTAÑA EDITAR -->
                 <div class="tab-pane fade" id="editar" role="tabpanel">
                     <form class="row g-4">
                         <div class="col-12">
-                            <label class="form-label small text-primary fw-bold"><i class="bi bi-search me-1"></i> Buscar Usuario a Editar</label>
+                            <label class="form-label small text-primary fw-bold"><i class="bi bi-search me-1"></i>BUSCAR USUARIO A EDITAR</label>
                             <div class="input-group shadow-sm border border-primary rounded">
                                 <span class="input-group-text bg-white border-0"><i class="bi bi-search text-primary"></i></span>
-                                <input type="text" class="form-control border-0" placeholder="Ingrese el documento a buscar...">
+                                <input type="text" class="form-control border-0" placeholder="Ingrese el nombre de usuario a buscar...">
                                 <button class="btn btn-primary px-4 fw-bold" type="button">Buscar</button>
                             </div>
                         </div>
@@ -167,9 +176,9 @@
                                 <span class="input-group-text bg-light"><i class="bi bi-person text-muted"></i></span>
                                 <select class="form-select bg-light text-muted">
                                     <option value="" selected disabled>Seleccione un rol</option>
-                                    <option value="admin">Administrador</option>
-                                    <option value="odontologo">Técnico RX</option>
-                                    <option value="recepcion">Recepcionista / Cajero</option>
+                                    <option value="Administrador">Administrador</option>
+                                    <option value="Tecnico">Técnico RX</option>
+                                    <option value="Recepcionista">Recepcionista / Cajero</option>
                                 </select>
                             </div>
                         </div>
@@ -180,6 +189,7 @@
                     </form>
                 </div>
 
+                <!-- 4. PESTAÑA ELIMINAR -->
                 <div class="tab-pane fade" id="eliminar" role="tabpanel">
                     <form class="row g-4">
                         <div class="col-12">
@@ -187,16 +197,14 @@
                                 <i class="bi bi-check-circle-fill me-2"></i> ¡Usuario eliminado con éxito del sistema RADO!
                             </div>
                         </div>
-
                         <div class="col-12">
                             <label class="form-label small text-danger fw-bold"><i class="bi bi-search me-1"></i> Buscar Usuario a Eliminar</label>
                             <div class="input-group shadow-sm border border-danger rounded">
                                 <span class="input-group-text bg-white border-0"><i class="bi bi-search text-danger"></i></span>
-                                <input type="text" class="form-control border-0" id="inputDocumentoEliminar" placeholder="Ingrese el documento a buscar...">
+                                <input type="text" class="form-control border-0" id="inputDocumentoEliminar" placeholder="Ingrese el nombre de usuario a buscar...">
                                 <button class="btn btn-outline-danger px-4 fw-bold border-0 border-start" type="button">Buscar</button>
                             </div>
                         </div>
-                        
                         <div class="col-12 text-center mt-5">
                             <button type="button" class="btn btn-danger w-75 py-3 fw-bold shadow-sm fs-5" id="btnPedirClaveEliminar">
                                 <i class="bi bi-trash3 me-2"></i> Eliminar Usuario
@@ -210,34 +218,28 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
     
     <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // --- 1. MODAL DE ACCESO INICIAL ---
-        const modalSeguridad = new bootstrap.Modal(document.getElementById('modalSeguridad'));
-        modalSeguridad.show();
+        
+        // --- 1. SEGURIDAD: VERIFICAR ROL DE ADMINISTRADOR ---
+        const rolUsuario = localStorage.getItem('rado_rol');
+        const rolNormalizado = rolUsuario ? rolUsuario.toLowerCase() : '';
+        
+        if (rolNormalizado !== 'admin' && rolNormalizado !== 'administrador') {
+            alert("Acceso denegado. Esta sección es exclusiva para el Administrador del sistema.");
+            window.location.href = "dashboard.html";
+            return; 
+        }
 
-        const btnVerificar = document.getElementById('btnVerificarClave');
-        const inputClave = document.getElementById('claveAdmin');
-        const errorClave = document.getElementById('errorClave');
-        const contenido = document.getElementById('contenidoPrincipal');
+        // Si es Admin, mostramos el contenido visual
+        document.getElementById('contenidoPrincipal').style.display = 'flex';
+        
+        // Cargamos la lista de usuarios al entrar
+        cargarListadoUsuarios();
 
-        btnVerificar.addEventListener('click', function() {
-            if (inputClave.value === 'admin123') {
-                modalSeguridad.hide();
-                contenido.style.display = 'block';
-                contenido.style.filter = 'none';
-            } else {
-                errorClave.style.display = 'block';
-                inputClave.classList.add('is-invalid');
-            }
-        });
-
-        inputClave.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') btnVerificar.click();
-        });
-
-        // --- 2. LÓGICA PARA MOSTRAR CONTRASEÑAS ---
+        // --- 2. LÓGICA PARA MOSTRAR/OCULTAR CONTRASEÑAS ---
         const togglePasswords = document.querySelectorAll('.toggle-password');
         togglePasswords.forEach(icon => {
             icon.addEventListener('click', function() {
@@ -253,40 +255,252 @@
             });
         });
 
-        // --- 3. LÓGICA DEL MODAL DE ELIMINACIÓN ---
+        // =========================================================
+        // MÓDULO 1: REGISTRAR USUARIO (POST)
+        // =========================================================
+        const btnGuardarNuevo = document.querySelector('#registrar .btn-primary');
+        const formRegistrar = document.querySelector('#registrar form');
+
+        btnGuardarNuevo.addEventListener('click', async () => {
+            const documento = document.querySelector('#registrar input[type="text"]').value.trim();
+            const claves = document.querySelectorAll('#registrar .input-clave');
+            const clave = claves[0].value.trim();
+            const claveConf = claves[1].value.trim();
+            const rol = document.querySelector('#registrar select').value;
+
+            if(!documento || !clave || !rol) return alert("⚠️ Por favor complete todos los campos.");
+            if(clave !== claveConf) return alert("❌ Las contraseñas no coinciden.");
+
+            try {
+                const response = await fetch('http://localhost:8080/api/usuarios', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nombreUsuario: documento,
+                        contrasenaUsuario: clave,
+                        rolUsuario: rol
+                    })
+                });
+
+                if(response.ok) {
+                    alert("✅ Usuario registrado correctamente.");
+                    formRegistrar.reset(); // Limpiar el formulario
+                    cargarListadoUsuarios(); // Refrescar la tabla
+                    
+                    // Volver automáticamente a la pestaña de listado
+                    const tabListar = new bootstrap.Tab(document.querySelector('button[data-bs-target="#listar"]'));
+                    tabListar.show();
+                } else {
+                    alert("Error al registrar el usuario en el servidor.");
+                }
+            } catch (error) {
+                console.error("Fallo de conexión:", error);
+                alert("Error de conexión con el backend.");
+            }
+        });
+
+        // =========================================================
+        // MÓDULO 2: EDITAR USUARIO (GET + PUT)
+        // =========================================================
+        let idUsuarioEditar = null; 
+        const btnBuscarEditar = document.querySelector('#editar .btn-primary'); // Botón buscar
+        const btnActualizarDatos = document.querySelectorAll('#editar .btn-primary')[1]; // Botón actualizar
+
+        // A. Buscar el usuario antes de editarlo
+        btnBuscarEditar.addEventListener('click', async () => {
+            const docBuscar = document.querySelector('#editar input[type="text"]').value.trim().toLowerCase();
+            if(!docBuscar) return alert("Ingrese un documento a buscar.");
+
+            try {
+                const res = await fetch('http://localhost:8080/api/usuarios');
+                const usuarios = await res.json();
+                
+                const usuario = usuarios.find(u => u.nombreUsuario.toLowerCase() === docBuscar);
+
+                if(usuario) {
+                    idUsuarioEditar = usuario.idUsuario;
+                    const clavesEdit = document.querySelectorAll('#editar .input-clave');
+                    clavesEdit[0].value = usuario.contrasenaUsuario;
+                    clavesEdit[1].value = usuario.contrasenaUsuario;
+
+                    // Seleccionar el rol actual en el desplegable
+                    const selectRol = document.querySelector('#editar select');
+                    for(let i=0; i<selectRol.options.length; i++) {
+                        if(selectRol.options[i].value.toLowerCase() === usuario.rolUsuario.toLowerCase()) {
+                            selectRol.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    alert("✅ Usuario encontrado. Puede modificar su contraseña o rol.");
+                } else {
+                    alert("❌ No se encontró ningún usuario con ese documento.");
+                    idUsuarioEditar = null;
+                }
+            } catch(e) { console.error(e); }
+        });
+
+        // B. Enviar los datos actualizados al backend
+        btnActualizarDatos.addEventListener('click', async () => {
+            if(!idUsuarioEditar) return alert("⚠️ Primero busque un usuario válido.");
+            
+            const documento = document.querySelector('#editar input[type="text"]').value.trim();
+            const claves = document.querySelectorAll('#editar .input-clave');
+            const clave = claves[0].value.trim();
+            const claveConf = claves[1].value.trim();
+            const rol = document.querySelector('#editar select').value;
+
+            if(!clave || !rol) return alert("⚠️ Complete los campos.");
+            if(clave !== claveConf) return alert("❌ Las contraseñas no coinciden.");
+
+            try {
+                const response = await fetch('http://localhost:8080/api/usuarios/' + idUsuarioEditar, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nombreUsuario: documento,
+                        contrasenaUsuario: clave,
+                        rolUsuario: rol
+                    })
+                });
+
+                if(response.ok) {
+                    alert("✅ Datos actualizados con éxito.");
+                    document.querySelector('#editar form').reset();
+                    idUsuarioEditar = null; 
+                    cargarListadoUsuarios(); 
+                    
+                    const tabListar = new bootstrap.Tab(document.querySelector('button[data-bs-target="#listar"]'));
+                    tabListar.show();
+                }
+            } catch(e) { alert("Error al actualizar."); }
+        });
+
+        // =========================================================
+        // MÓDULO 3: ELIMINAR USUARIO (DELETE)
+        // =========================================================
+        let idUsuarioEliminar = null;
+        const btnBuscarEliminar = document.querySelector('#eliminar .btn-outline-danger');
+        const docInputEliminar = document.getElementById('inputDocumentoEliminar');
+
+        // A. Buscar para confirmar existencia
+        btnBuscarEliminar.addEventListener('click', async () => {
+            const docBuscar = docInputEliminar.value.trim().toLowerCase();
+            if(!docBuscar) return alert("Ingrese un documento a buscar.");
+
+            try {
+                const res = await fetch('http://localhost:8080/api/usuarios');
+                const usuarios = await res.json();
+                
+                const usuario = usuarios.find(u => u.nombreUsuario.toLowerCase() === docBuscar);
+
+                if(usuario) {
+                    idUsuarioEliminar = usuario.idUsuario;
+                    alert(`✅ Usuario ${usuario.nombreUsuario} encontrado. \nPresione 'Eliminar Usuario' si desea borrarlo del sistema.`);
+                } else {
+                    alert("❌ No se encontró ningún usuario con ese documento.");
+                    idUsuarioEliminar = null;
+                }
+            } catch(e) {
+                console.error("Error al buscar:", e);
+            }
+        });
+
+        // B. Modal 
         const modalEliminar = new bootstrap.Modal(document.getElementById('modalEliminar'));
         const btnPedirClaveEliminar = document.getElementById('btnPedirClaveEliminar');
         const btnConfirmarEliminacion = document.getElementById('btnConfirmarEliminacion');
         const inputClaveEliminar = document.getElementById('claveEliminar');
         const errorClaveEliminar = document.getElementById('errorClaveEliminar');
         const alertaEliminado = document.getElementById('alertaEliminado');
-        const inputDocumentoEliminar = document.getElementById('inputDocumentoEliminar');
 
         btnPedirClaveEliminar.addEventListener('click', function() {
+            if(!idUsuarioEliminar) return alert("⚠️ Primero busque un usuario válido para eliminar.");
             inputClaveEliminar.value = ''; 
             errorClaveEliminar.style.display = 'none';
             inputClaveEliminar.classList.remove('is-invalid');
             modalEliminar.show();
         });
 
-        btnConfirmarEliminacion.addEventListener('click', function() {
-            if (inputClaveEliminar.value === 'admin123') {
-                modalEliminar.hide(); 
-                alertaEliminado.classList.remove('d-none'); 
-                inputDocumentoEliminar.value = ''; 
+        // C. Ejecutar el DELETE final (Validación con la clave del Administrador actual)
+        btnConfirmarEliminacion.addEventListener('click', async function() {
+            const claveIngresada = inputClaveEliminar.value.trim();
+            const adminActual = localStorage.getItem('rado_usuario_nombre');
+            
+            if (!adminActual) {
+                alert("⚠️ Error de sesión: No se encontró el nombre del administrador en memoria. Por favor, vuelva a iniciar sesión.");
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:8080/api/usuarios');
+                const usuarios = await res.json();
                 
-                setTimeout(() => {
-                    alertaEliminado.classList.add('d-none');
-                }, 4000);
-            } else {
-                errorClaveEliminar.style.display = 'block';
-                inputClaveEliminar.classList.add('is-invalid');
+                const admin = usuarios.find(u => u.nombreUsuario.toLowerCase() === adminActual.toLowerCase());
+
+                if (admin && admin.contrasenaUsuario === claveIngresada) {
+                    const response = await fetch('http://localhost:8080/api/usuarios/' + idUsuarioEliminar, {
+                        method: 'DELETE'
+                    });
+
+                    if(response.ok) {
+                        modalEliminar.hide(); 
+                        alertaEliminado.classList.remove('d-none'); 
+                        docInputEliminar.value = ''; 
+                        idUsuarioEliminar = null;
+                        
+                        cargarListadoUsuarios(); 
+                        
+                        setTimeout(() => {
+                            alertaEliminado.classList.add('d-none');
+                        }, 4000);
+                    } else {
+                        alert("Error al intentar eliminar el usuario en el servidor.");
+                    }
+                } else {
+                    errorClaveEliminar.style.display = 'block';
+                    inputClaveEliminar.classList.add('is-invalid');
+                }
+            } catch(e) { 
+                alert("Error conectando al servidor para validar la clave."); 
+                console.error(e);
             }
         });
-    });
-</script>
 
-</body>
-</html>
+    }); // <-- ¡Aquí se cierra correctamente el DOMContentLoaded!
 
-<script src="js/main.js"></script>
+    // ==========================================
+    // FUNCIÓN PARA CONSUMIR LA API Y ARMAR LA TABLA
+    // ==========================================
+    async function cargarListadoUsuarios() {
+        try {
+            const response = await fetch('http://localhost:8080/api/usuarios');
+            if (response.ok) {
+                const usuarios = await response.json();
+                const tbody = document.getElementById('tablaUsuariosBody');
+                
+                if (usuarios.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-muted">No hay usuarios registrados.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = ''; 
+                
+                usuarios.forEach(u => {
+                    let badgeClass = (u.rolUsuario.toLowerCase() === 'admin' || u.rolUsuario.toLowerCase() === 'administrador') ? 'bg-danger' : 'bg-primary';
+                    
+                    tbody.innerHTML += `
+                        <tr>
+                            <td class="text-muted fw-bold">#${u.idUsuario}</td>
+                            <td class="fw-bold text-dark"><i class="bi bi-person-circle me-2 text-muted"></i>${u.nombreUsuario}</td>
+                            <td class="font-monospace text-muted" style="letter-spacing: 2px;">${u.contrasenaUsuario}</td>
+                            <td><span class="badge ${badgeClass} px-3 py-2">${u.rolUsuario}</span></td>
+                        </tr>
+                    `;
+                });
+            }
+        } catch (error) {
+            console.error("Error al cargar los usuarios:", error);
+            document.getElementById('tablaUsuariosBody').innerHTML = '<tr><td colspan="4" class="text-danger fw-bold">Error de conexión con el servidor.</td></tr>';
+        }
+    }
+    </script>

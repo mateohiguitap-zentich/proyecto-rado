@@ -105,8 +105,16 @@
 
                     // Evaluamos la respuesta
                     if (response.status === 200) {
-                        // 200 OK: Autenticación exitosa
+                        // 1. Capturamos el objeto JSON completo que nos devuelve Java
+                        const usuario = await response.json();
+
+                        // 2. LA MAGIA: Guardamos el rol y el nombre en la memoria del navegador
+                        localStorage.setItem('rado_rol', usuario.rolUsuario);
+                        localStorage.setItem('rado_usuario_nombre', usuario.nombreUsuario); 
+
+                        // 3. Redirigimos al sistema
                         window.location.href = "dashboard.html";
+                        
                     } else if (response.status === 401) {
                         // 401 UNAUTHORIZED: Credenciales incorrectas
                         alertaError.classList.remove('d-none');

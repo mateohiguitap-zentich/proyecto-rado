@@ -22,6 +22,10 @@ public class Factura {
     @Column(name = "id_orden")
     private Integer idOrden;
 
+    // --- NUEVO CAMPO PARA EL REPORTE ---
+    @Column(name = "metodo_pago", length = 50)
+    private String metodoPago;
+
     // --- GETTERS Y SETTERS ---
     public Integer getIdFactura() { return idFactura; }
     public void setIdFactura(Integer idFactura) { this.idFactura = idFactura; }
@@ -34,4 +38,8 @@ public class Factura {
 
     public Integer getIdOrden() { return idOrden; }
     public void setIdOrden(Integer idOrden) { this.idOrden = idOrden; }
+
+    // Getter y Setter del método de pago
+    public String getMetodoPago() { return metodoPago; }
+    public void setMetodoPago(String metodoPago) { this.metodoPago = metodoPago; }
 }

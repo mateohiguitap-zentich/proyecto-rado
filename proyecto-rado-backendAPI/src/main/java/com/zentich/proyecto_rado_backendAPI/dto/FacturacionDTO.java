@@ -7,6 +7,7 @@ public class FacturacionDTO {
     
     private Integer idOrden;
     private BigDecimal totalFactura;
+    private String metodoPago;
     private List<DetalleDTO> detalles;
 
     public Integer getIdOrden() { return idOrden; }
@@ -14,6 +15,9 @@ public class FacturacionDTO {
 
     public BigDecimal getTotalFactura() { return totalFactura; }
     public void setTotalFactura(BigDecimal totalFactura) { this.totalFactura = totalFactura; }
+
+    public String getMetodoPago() { return metodoPago; }
+    public void setMetodoPago(String metodoPago) { this.metodoPago = metodoPago; }
 
     public List<DetalleDTO> getDetalles() { return detalles; }
     public void setDetalles(List<DetalleDTO> detalles) { this.detalles = detalles; }

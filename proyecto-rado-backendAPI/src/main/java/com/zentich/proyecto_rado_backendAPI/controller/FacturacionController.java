@@ -33,6 +33,8 @@ public class FacturacionController {
             nuevaFactura.setIdOrden(payload.getIdOrden());
             nuevaFactura.setTotalFactura(payload.getTotalFactura());
             nuevaFactura.setFechaFactura(new Timestamp(System.currentTimeMillis())); // Fecha y hora actual
+            nuevaFactura.setMetodoPago(payload.getMetodoPago());
+            facturaRepository.save(nuevaFactura);
             
             facturaRepository.save(nuevaFactura);
 

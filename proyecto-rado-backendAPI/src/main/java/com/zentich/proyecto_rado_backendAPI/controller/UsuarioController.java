@@ -35,10 +35,10 @@ public class UsuarioController {
     // ==========================================
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDto) {
-        boolean esValido = usuarioService.autenticarUsuario(loginDto);
+        Usuario usuario = usuarioService.autenticarUsuario(loginDto);
         
-        if (esValido) {
-            return new ResponseEntity<>("Autenticación exitosa", HttpStatus.OK);
+        if (usuario != null) {
+            return new ResponseEntity<>(usuario, HttpStatus.OK); // Envía el JSON del usuario
         } else {
             return new ResponseEntity<>("Credenciales incorrectas", HttpStatus.UNAUTHORIZED);
         }
