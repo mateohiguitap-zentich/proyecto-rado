@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     // 1. Cargar la lista de estudios desde MySQL al abrir la página
     if (selectEstudio) {
         try {
-            const response = await fetch('http://localhost:8080/api/estudios/listar');
+            const response = await fetch('https://proyecto-rado.onrender.com/api/estudios/listar');
             if (response.ok) {
                 const estudios = await response.json();
                 selectEstudio.innerHTML = '<option value="" selected disabled>Seleccione un estudio...</option>';
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
             try {
-                const response = await fetch('http://localhost:8080/api/pacientes/registrar', {
+                const response = await fetch('https://proyecto-rado.onrender.com/api/pacientes/registrar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(pacienteDTO)
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function() {
             
             if(documento.length > 0) {
                 try {
-                    const response = await fetch('http://localhost:8080/api/pacientes/buscar/' + documento);
+                    const response = await fetch('https://proyecto-rado.onrender.com/api/pacientes/buscar/' + documento);
                     
                     if(response.status === 200) {
                         const paciente = await response.json();
@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", function() {
             };
 
             try {
-                const response = await fetch('http://localhost:8080/api/pacientes/editar/' + idPaciente, {
+                const response = await fetch('https://proyecto-rado.onrender.com/api/pacientes/editar/' + idPaciente, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(pacienteDTO)
@@ -318,11 +318,13 @@ document.addEventListener("DOMContentLoaded", function() {
         btnEliminar.addEventListener('click', async function() {
             const idPaciente = document.getElementById('idPacienteOculto').value;
             const nombre = document.getElementById('nomPaciente').value;
-            const seguro = confirm(`⚠️ ADVERTENCIA: ¿Está seguro que desea eliminar todo el historial de ${nombre}?\n\nEsta acción borrará al paciente y sus contactos de emergencia.`);
+            const seguro = confirm(`⚠️ ADVERTENCIA: ¿Está seguro que desea eliminar todo el historial de ${nombre}?
+
+Esta acción borrará al paciente y sus contactos de emergencia.`);
             
             if (seguro) {
                 try {
-                    const response = await fetch('http://localhost:8080/api/pacientes/eliminar/' + idPaciente, { method: 'DELETE' });
+                    const response = await fetch('https://proyecto-rado.onrender.com/api/pacientes/eliminar/' + idPaciente, { method: 'DELETE' });
                     if (response.status === 200) {
                         alert("Registro eliminado definitivamente.");
                         window.location.reload(); 
@@ -464,7 +466,7 @@ document.addEventListener("DOMContentLoaded", function() {
             };
 
             try {
-                const response = await fetch('http://localhost:8080/api/ordenes/guardar', {
+                const response = await fetch('https://proyecto-rado.onrender.com/api/ordenes/guardar', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(ordenDTO)
@@ -534,7 +536,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     if (sedeActualSpan && dropdownMenu) {
         try {
-            const response = await fetch('http://localhost:8080/api/sedes/listar');
+            const response = await fetch('https://proyecto-rado.onrender.com/api/sedes/listar');
             if (response.ok) {
                 const sedes = await response.json();
                 dropdownMenu.innerHTML = '<li><h6 class="dropdown-header small text-muted">Seleccionar Sede</h6></li>';
@@ -587,7 +589,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 // =====================================================================
 async function cargarMetricasDashboard(idSede) {
     try {
-        const response = await fetch('http://localhost:8080/api/dashboard/metricas/' + idSede);
+        const response = await fetch('https://proyecto-rado.onrender.com/api/dashboard/metricas/' + idSede);
         if (response.ok) {
             const data = await response.json();
             const formater = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
@@ -774,7 +776,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 };
 
                 try {
-                    const response = await fetch('http://localhost:8080/api/facturacion/cobrar', {
+                    const response = await fetch('https://proyecto-rado.onrender.com/api/facturacion/cobrar', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(facturacionDTO)
@@ -944,7 +946,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             try {
                 // LLAMADA REAL A LA API DE SPRING BOOT
-                const response = await fetch(`http://localhost:8080/api/reportes/${tipo}?inicio=${fechaInicio}&fin=${fechaFin}`);
+                const response = await fetch(`https://proyecto-rado.onrender.com/api/reportes/${tipo}?inicio=${fechaInicio}&fin=${fechaFin}`);
                 
                 if (!response.ok) throw new Error("Error en el servidor");
                 
