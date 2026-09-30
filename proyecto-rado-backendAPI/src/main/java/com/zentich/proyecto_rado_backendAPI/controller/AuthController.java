@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*") // Permite que tu Frontend (React/HTML) se conecte sin bloqueos de seguridad CORS
+@CrossOrigin(origins = "https://zenthic-facturacion-rado.netlify.app") // URL exacta de producción en Netlify
 public class AuthController {
 
     /**

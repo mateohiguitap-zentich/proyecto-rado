@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/ordenes")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "https://zenthic-facturacion-rado.netlify.app")
 public class OrdenServicioController {
 
     @Autowired

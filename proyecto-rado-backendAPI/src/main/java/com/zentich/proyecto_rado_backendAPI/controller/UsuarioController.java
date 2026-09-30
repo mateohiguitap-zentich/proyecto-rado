@@ -21,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "*") 
+@CrossOrigin(origins = "https://zenthic-facturacion-rado.netlify.app") 
 public class UsuarioController {
 
     @Autowired

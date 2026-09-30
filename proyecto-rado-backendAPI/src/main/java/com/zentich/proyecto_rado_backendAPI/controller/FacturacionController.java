@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 
 @RestController
 @RequestMapping("/api/facturacion")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "https://zenthic-facturacion-rado.netlify.app")
 public class FacturacionController {
 
     @Autowired
@@ -34,9 +34,8 @@ public class FacturacionController {
             nuevaFactura.setTotalFactura(payload.getTotalFactura());
             nuevaFactura.setFechaFactura(new Timestamp(System.currentTimeMillis())); // Fecha y hora actual
             nuevaFactura.setMetodoPago(payload.getMetodoPago());
-            facturaRepository.save(nuevaFactura);
             
-            facturaRepository.save(nuevaFactura);
+            facturaRepository.save(nuevaFactura); // <-- Se eliminó la línea duplicada que estaba justo debajo
 
             // 2. Guardar cada estudio en el Detalle de la Orden
             if (payload.getDetalles() != null && !payload.getDetalles().isEmpty()) {

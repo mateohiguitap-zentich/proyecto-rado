@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/dashboard")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "https://zenthic-facturacion-rado.netlify.app") // URL exacta de producción en Netlify
 public class DashboardController {
 
     @Autowired
