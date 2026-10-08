@@ -312,7 +312,8 @@
             if(!docBuscar) return alert("Ingrese un documento a buscar.");
 
             try {
-                const res = await fetch('http://localhost:8080/api/usuarios');
+                // RUTA CORREGIDA
+                const res = await fetch('https://proyecto-rado.onrender.com/api/usuarios');
                 const usuarios = await res.json();
                 
                 const usuario = usuarios.find(u => u.nombreUsuario.toLowerCase() === docBuscar);
@@ -353,7 +354,8 @@
             if(clave !== claveConf) return alert("❌ Las contraseñas no coinciden.");
 
             try {
-                const response = await fetch('http://localhost:8080/api/usuarios/' + idUsuarioEditar, {
+                // RUTA CORREGIDA
+                const response = await fetch('https://proyecto-rado.onrender.com/api/usuarios/' + idUsuarioEditar, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -388,7 +390,8 @@
             if(!docBuscar) return alert("Ingrese un documento a buscar.");
 
             try {
-                const res = await fetch('http://localhost:8080/api/usuarios');
+                // RUTA CORREGIDA
+                const res = await fetch('https://proyecto-rado.onrender.com/api/usuarios');
                 const usuarios = await res.json();
                 
                 const usuario = usuarios.find(u => u.nombreUsuario.toLowerCase() === docBuscar);
@@ -432,13 +435,15 @@
             }
 
             try {
-                const res = await fetch('http://localhost:8080/api/usuarios');
+                // RUTA CORREGIDA
+                const res = await fetch('https://proyecto-rado.onrender.com/api/usuarios');
                 const usuarios = await res.json();
                 
                 const admin = usuarios.find(u => u.nombreUsuario.toLowerCase() === adminActual.toLowerCase());
 
                 if (admin && admin.contrasenaUsuario === claveIngresada) {
-                    const response = await fetch('http://localhost:8080/api/usuarios/' + idUsuarioEliminar, {
+                    // RUTA CORREGIDA
+                    const response = await fetch('https://proyecto-rado.onrender.com/api/usuarios/' + idUsuarioEliminar, {
                         method: 'DELETE'
                     });
 
@@ -473,7 +478,8 @@
     // ==========================================
     async function cargarListadoUsuarios() {
         try {
-            const response = await fetch('http://localhost:8080/api/usuarios');
+            // RUTA CORREGIDA (Era esta la que disparaba el texto rojo)
+            const response = await fetch('https://proyecto-rado.onrender.com/api/usuarios');
             if (response.ok) {
                 const usuarios = await response.json();
                 const tbody = document.getElementById('tablaUsuariosBody');
