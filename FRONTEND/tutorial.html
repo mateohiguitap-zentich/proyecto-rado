@@ -18,8 +18,18 @@
 
     <main class="container">
         <section class="intro-section">
-            <p class="intro-text">Este manual servirá de guía para que el usuario pueda utilizar de manera óptima nuestra plataforma web.</p>
+            <p class="intro-text">Este manual de usuario servirá de guía detallada para que el personal administrativo, de recepción y técnicos pueda utilizar de manera óptima nuestra plataforma web RADO. El documento describe las funcionalidades principales, los flujos de trabajo paso a paso y los diferentes módulos que componen el sistema, garantizando un registro eficiente de pacientes, la correcta generación de órdenes virtuales y el procesamiento de la facturación electrónica, además de generar reportes y gestionar usuarios.</p>
             
+            <div class="instrucciones-card" style="margin-bottom: 2rem; text-align: left;">
+                <h2>Instrucciones de Ingreso al Sistema</h2>
+                <p>Para iniciar el uso de la plataforma RADO, el usuario debe seguir estos pasos:</p>
+                <ol style="margin-left: 2rem;">
+                    <li>Abrir un navegador web (se recomienda Google Chrome o Mozilla Firefox) e ingresar a la URL del sistema.</li>
+                    <li>En la pantalla de inicio de sesión, el usuario deberá digitar su Nombre de Usuario y su Clave Única.</li>
+                    <li>Dependiendo del rol asignado (Administrador, Recepcionista o Técnico), el sistema habilitará automáticamente los módulos correspondientes a sus funciones.</li>
+                </ol>
+            </div>
+
             <div class="indice-card">
                 <h2>Índice Temático</h2>
                 <p>Haz clic en cualquier tema para ir directamente a su explicación:</p>
@@ -40,7 +50,7 @@
                 <img src="img/modulo panel de control.jpg" alt="Vista del Panel de Control">
             </div>
             <div class="descripcion">
-                <p>En este módulo se encontrará un resumen del día dependiendo de la sede en donde estemos ubicados.</p>
+                <p>En este módulo se encontrará un resumen del día dependiendo de la sede en donde estemos ubicados. Sirve como pantalla principal para visualizar métricas rápidas de la operación diaria, todo puede ser adaptable según lo desee el cliente.</p>
             </div>
         </section>
 
@@ -52,10 +62,10 @@
             <div class="descripcion">
                 <p>En este módulo se empieza a dar funcionamiento a la plataforma. Primeramente, iniciamos digitando el número de documento del paciente.</p>
                 <ul>
-                    <li>Si el documento digitado ya existe, el sistema mostrará una ventana emergente donde el usuario cargará la información asociada a ese número de documento ingresado.</li>
-                    <li>De no estar registrado el número de documento, el usuario podrá pasar por cada uno de los datos que debe llenar usando el mouse o la tecla TAB. Es obligatorio llenar cada uno de los datos; de hacer falta alguno, el sistema mostrará un mensaje notificando qué datos hacen falta. En caso tal de que el paciente no desee registrar algún dato, el usuario pondrá <strong>NA</strong>.</li>
+                    <li>Si el documento digitado ya existe, el sistema automáticamente cargará la información asociada a ese número de documento ingresado.</li>
+                    <li>De no estar registrado el número de documento, el usuario podrá pasar por cada uno de los datos que debe llenar usando el mouse o la tecla TAB. Es obligatorio llenar cada uno de los datos; de hacer falta alguno, el sistema mostrará un mensaje notificando qué datos hacen falta. En caso tal de que el paciente no desee registrar algún dato, el usuario pondrá NA.</li>
                 </ul>
-                <p>Una vez finalizada la captación de datos, el usuario deberá dar clic en el botón <strong>guardar</strong> que se encuentra en la parte superior derecha. Para luego seguir con el proceso de generación de orden virtual dando clic en el botón <em>“FINALIZAR REGISTRO Y GENERAR ORDEN VIRTUAL”</em>.</p>
+                <p><strong>Flujo de guardado:</strong> Una vez finalizada la captación de datos, el usuario deberá dar clic en el botón "FINALIZAR REGISTRO Y GENERAR ORDEN VIRTUAL" para que el sistema guarde los datos del paciente y el usuario contiene con la ORDEN VIRTUAL</p>
             </div>
         </section>
 
@@ -65,10 +75,10 @@
                 <img src="img/modulo orden virtual.jpg" alt="Vista de la Orden Virtual">
             </div>
             <div class="descripcion">
-                <p>El sistema cargará la información necesaria del paciente, encontrada en la sección “Datos del Paciente”.</p>
-                <p>El usuario deberá llenar la sección de “Información del Servicio”, donde podrá agregar uno o más estudios a realizar, odontólogo remitente y su correo electrónico (en caso tal de no tener, se pone <strong>NA</strong>).</p>
-                <p>En Detalles de entrega, se selecciona el “Formato de entrega”: <strong>FÍSICO, VIRTUAL o FÍSICO/VIRTUAL</strong>.</p>
-                <p>Una vez finalizada la sección, el usuario debe dar clic en <strong>“Guardar Orden”</strong> para poder enviar la orden en formato PDF a los técnicos, además servirá como puente para la generación de la factura electrónica.</p>
+                <p>El sistema cargará automáticamente la información necesaria del paciente en la sección “Datos del Paciente”.</p>
+                <p>El usuario deberá llenar la sección de “Información del Servicio”, donde podrá agregar uno o más estudios a realizar, el odontólogo remitente y su correo electrónico (en caso tal de no tener, se pone NA). También podrá agregar observaciones en la sección de “Información del Servicio” en caso de ser necesario.</p>
+                <p>En "Detalles de entrega", se debe seleccionar el formato de entrega: FÍSICO, VIRTUAL o FÍSICO/VIRTUAL.</p>
+                <p><strong>Flujo de guardado:</strong> Una vez finalizada la sección, el usuario debe dar clic en “Guardar Orden” para poder que el sistema genere una ventana emergente donde el usuario podrá guardar la orden en formato PDF y ser enviado a los técnicos. Esta acción además servirá como puente para la generación de la factura electrónica.</p>
             </div>
         </section>
 
@@ -78,9 +88,9 @@
                 <img src="img/modulo facturacion electronica.jpg" alt="Vista de la Factura Electrónica">
             </div>
             <div class="descripcion">
-                <p>El sistema cargará la información de factura, información de contacto, información de la clínica (según la sede donde estemos facturando) e información de facturación.</p>
-                <p>El usuario deberá diligenciar el <strong>valor a pagar</strong> y el <strong>método de pago</strong> (EFECTIVO, CONSIGNACIÓN/TRANSFERENCIA, TARJETA DÉBITO O TARJETA CRÉDITO).</p>
-                <p>Una vez diligenciado todo correctamente, el usuario debe dar clic en <strong>guardar</strong> y luego <strong>enviar</strong>, botones que se encuentran en la parte superior derecha de la pantalla.</p>
+                <p>El sistema cargará de forma automática la información de factura, información de contacto, información de la clínica (según la sede donde estemos facturando) e información de facturación.</p>
+                <p>El usuario deberá diligenciar el valor a pagar y el método de pago (EFECTIVO, CONSIGNACIÓN/TRANSFERENCIA, TARJETA DÉBITO O TARJETA CRÉDITO).</p>
+                <p><strong>Flujo de facturación:</strong> Una vez diligenciado todo correctamente, el usuario debe dar clic en "Guardar" botón que se encuentran en la parte superior derecha de la pantalla.</p>
             </div>
         </section>
 
@@ -90,11 +100,11 @@
                 <img src="img/modulo generacion de reporte.jpg" alt="Vista de Generación de Reportes">
             </div>
             <div class="descripcion">
-                <p>Se podrá evidenciar por el momento: CONSOLIDADO POR SEDE, FACTURACIÓN POR SEDE y AGENDAMIENTO DE CITAS. En un futuro se puede agregar otro tipo de reporte según las necesidades del cliente.</p>
+                <p>Se podrá evidenciar por el momento: CONSOLIDADO POR SEDE, FACTURACIÓN POR SEDE y AGENDAMIENTO DE CITAS. (En un futuro se puede agregar otro tipo de reporte según las necesidades del cliente).</p>
                 <ul>
-                    <li>La fecha de inicio debe ser inferior o igual a la fecha final.</li>
-                    <li><strong>Previsualizar:</strong> Es el botón donde el usuario podrá obtener una vista previa del informe previamente solicitado.</li>
-                    <li><strong>Exportar:</strong> En este botón el sistema genera un archivo en Excel, según el informe solicitado.</li>
+                    <li><strong>Filtros:</strong> La fecha de inicio debe ser inferior o igual a la fecha final.</li>
+                    <li><strong>Previsualizar:</strong> Botón donde el usuario podrá obtener una vista previa del informe solicitado.</li>
+                    <li><strong>Exportar:</strong> En este botón el sistema genera y descarga un archivo en formato Excel, según el informe solicitado.</li>
                 </ul>
             </div>
         </section>
@@ -105,10 +115,21 @@
                 <img src="img/modulo gestion de usuario.jpg" alt="Vista de Gestión de Usuario">
             </div>
             <div class="descripcion">
-                <p>En este módulo solo podrá tener acceso el personal administrativo autorizado. Acá se podrá <strong>agregar un nuevo usuario</strong>, el cual debe tener número de documento, clave única y rol asignado. Si el número digitado ya se encuentra en uso, el sistema no dejará guardar la información.</p>
+                <p>A este módulo solo podrá tener acceso el personal administrativo autorizado. Acá se podrá:</p>
                 <ul>
+                    <li><strong>Agregar un nuevo usuario:</strong> Se debe ingresar el número de documento, clave única y rol asignado. Si el número digitado ya se encuentra en uso, el sistema no dejará guardar la información.</li>
                     <li><strong>Editar usuario:</strong> El usuario debe ingresar el número del documento que desea editar, donde podrá cambiar la clave y asignar un nuevo rol. Si el número de documento ingresado no existe, no generará ninguna acción.</li>
-                    <li><strong>Eliminar usuario:</strong> El usuario podrá eliminar un usuario existente, ingresando su número de documento y validando en el sistema que exista para que posteriormente el sistema muestre una ventana confirmando que se desea eliminar al usuario seleccionado.</li>
+                    <li><strong>Eliminar usuario:</strong> El usuario podrá eliminar un perfil existente ingresando su número de documento. Tras validarlo, el sistema mostrará una ventana de confirmación antes de proceder a la eliminación.</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="bibliografia" class="modulo-card">
+            <h2>Bibliografía</h2>
+            <div class="descripcion">
+                <ul>
+                    <li>Departamento Nacional de Planeación (DNP). (s.f.). Guía para la elaboración de manuales de usuario de los sistemas de información.</li>
+                    <li>Servicio Nacional de Aprendizaje (SENA). (2026). Material de formación y guías de la fase de Ejecución. Programa de Análisis y Desarrollo de Software.</li>
                 </ul>
             </div>
         </section>
@@ -116,7 +137,7 @@
     </main>
 
     <footer class="footer text-center">
-        <p>Sistema RADO © 2026 - Manual de Usuario | Evidencia GA6-220501096-AA4-EV01</p>
+        <p>Sistema RADO © 2026 - Manual de Usuario | Evidencia GA10-220501097-AA11-EV01</p>
     </footer>
 
 </body>
