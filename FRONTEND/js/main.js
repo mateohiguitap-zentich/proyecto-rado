@@ -277,6 +277,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const btnEliminar = document.getElementById('btnEliminarArriba');
 
     if (btnActualizar && btnEliminar) {
+        
+        // -----------------------------------------
+        // 1. FUNCIÓN ACTUALIZAR
+        // -----------------------------------------
         btnActualizar.addEventListener('click', async function() {
             const idPaciente = document.getElementById('idPacienteOculto').value;
             
@@ -305,38 +309,87 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
 
                 if (response.status === 200) {
-                    alert("¡Datos del paciente actualizados correctamente!");
-                    window.location.reload(); 
+                    // Alerta mejorada con SweetAlert2
+                    Swal.fire({
+                        title: '¡Actualizado!',
+                        text: 'Datos del paciente actualizados correctamente.',
+                        icon: 'success',
+                        confirmButtonColor: '#2D89EF'
+                    }).then(() => {
+                        window.location.reload(); 
+                    });
                 } else {
-                    alert("Error al actualizar los datos.");
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Error al actualizar los datos.',
+                        icon: 'error',
+                        confirmButtonColor: '#2D89EF'
+                    });
                 }
             } catch (error) {
                 console.error("Error:", error);
+                Swal.fire({
+                    title: 'Error de conexión',
+                    text: 'Hubo un problema al comunicarse con el servidor.',
+                    icon: 'error',
+                    confirmButtonColor: '#2D89EF'
+                });
             }
         });
 
-        btnEliminar.addEventListener('click', async function() {
+        // -----------------------------------------
+        // 2. FUNCIÓN ELIMINAR
+        // -----------------------------------------
+        btnEliminar.addEventListener('click', function() {
             const idPaciente = document.getElementById('idPacienteOculto').value;
             const nombre = document.getElementById('nomPaciente').value;
-            const seguro = confirm(`⚠️ ADVERTENCIA: ¿Está seguro que desea eliminar todo el historial de ${nombre}?
 
-Esta acción borrará al paciente y sus contactos de emergencia.`);
-            
-            if (seguro) {
-                try {
-                    const response = await fetch('https://proyecto-rado.onrender.com/api/pacientes/eliminar/' + idPaciente, { method: 'DELETE' });
-                    if (response.status === 200) {
-                        alert("Registro eliminado definitivamente.");
-                        window.location.reload(); 
-                    } else {
-                        alert("No se pudo eliminar el registro. Puede que tenga órdenes activas.");
+            Swal.fire({
+                title: `¿Eliminar a ${nombre}?`,
+                text: "⚠️ ADVERTENCIA: Esta acción borrará al paciente y sus contactos de emergencia.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then(async (result) => {
+                
+                if (result.isConfirmed) {
+                    try {
+                        const response = await fetch('https://proyecto-rado.onrender.com/api/pacientes/eliminar/' + idPaciente, { method: 'DELETE' });
+                        
+                        if (response.status === 200) {
+                            Swal.fire({
+                                title: '¡Eliminado!',
+                                text: 'Registro eliminado definitivamente.',
+                                icon: 'success',
+                                confirmButtonColor: '#2D89EF'
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'No se pudo eliminar',
+                                text: 'El registro no se puede borrar porque tiene órdenes activas.',
+                                icon: 'error',
+                                confirmButtonColor: '#2D89EF'
+                            });
+                        }
+                    } catch (error) {
+                        console.error("Error:", error);
+                        Swal.fire({
+                            title: 'Error de conexión',
+                            text: 'Hubo un problema al comunicarse con el servidor.',
+                            icon: 'error',
+                            confirmButtonColor: '#2D89EF'
+                        });
                     }
-                } catch (error) {
-                    console.error("Error:", error);
                 }
-            }
+            });
         });
-    }
+
+    } 
 });
 
 // =====================================================================
@@ -1048,5 +1101,28 @@ document.addEventListener("DOMContentLoaded", function() {
                     </tr>`;
             });
         }
+    }
+});
+
+// =====================================================================
+// BLOQUEO DE RUTA PARA USUARIOS NO ADMINISTRADORES
+// =====================================================================
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Recuperar el rol guardado en localStorage durante el Login
+    const rolUsuario = localStorage.getItem('rol'); // Ajusta la llave si usas un nombre distinto como 'userRol'
+
+    // 2. Si la vista actual es la de usuarios y el rol no es ADMIN, bloquear y expulsar
+    if (window.location.pathname.includes('gestion_usuarios.html') && rolUsuario !== 'ADMIN') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Acceso Restringido',
+            text: 'Tu perfil no tiene permisos para acceder a la gestión del sistema.',
+            confirmButtonColor: '#2D89EF',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then(() => {
+            // Redirigir inmediatamente al panel principal
+            window.location.href = 'dashboard.html'; 
+        });
     }
 });
