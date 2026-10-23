@@ -1103,26 +1103,3 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 });
-
-// =====================================================================
-// BLOQUEO DE RUTA PARA USUARIOS NO ADMINISTRADORES
-// =====================================================================
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. Recuperar el rol guardado en localStorage durante el Login
-    const rolUsuario = localStorage.getItem('rol'); // Ajusta la llave si usas un nombre distinto como 'userRol'
-
-    // 2. Si la vista actual es la de usuarios y el rol no es ADMIN, bloquear y expulsar
-    if (window.location.pathname.includes('gestion_usuarios.html') && rolUsuario !== 'ADMIN') {
-        Swal.fire({
-            icon: 'error',
-            title: 'Acceso Restringido',
-            text: 'Tu perfil no tiene permisos para acceder a la gestión del sistema.',
-            confirmButtonColor: '#2D89EF',
-            allowOutsideClick: false,
-            allowEscapeKey: false
-        }).then(() => {
-            // Redirigir inmediatamente al panel principal
-            window.location.href = 'dashboard.html'; 
-        });
-    }
-});

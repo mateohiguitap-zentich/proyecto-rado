@@ -229,8 +229,17 @@
         const rolNormalizado = rolUsuario ? rolUsuario.toLowerCase() : '';
         
         if (rolNormalizado !== 'admin' && rolNormalizado !== 'administrador') {
-            alert("Acceso denegado. Esta sección es exclusiva para el Administrador del sistema.");
-            window.location.href = "dashboard.html";
+            // Bloqueo visual profesional con SweetAlert2
+            Swal.fire({
+                icon: 'error',
+                title: 'Acceso Restringido',
+                text: 'Esta sección es exclusiva para el Administrador del sistema.',
+                confirmButtonColor: '#2D89EF',
+                allowOutsideClick: false, 
+                allowEscapeKey: false     
+            }).then(() => {
+                window.location.href = "dashboard.html";
+            });
             return; 
         }
 
