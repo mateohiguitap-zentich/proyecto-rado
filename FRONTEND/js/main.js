@@ -981,14 +981,24 @@ document.addEventListener("DOMContentLoaded", function() {
             const fechaInicio = inputInicio.value;
             const fechaFin = inputFin.value;
 
-            // Validación 1: Campos vacíos
+            // Validación 1: Campos vacíos con SweetAlert2
             if (!tipo || !fechaInicio || !fechaFin) {
-                return alert("⚠️ Por favor, seleccione el tipo de reporte y el rango completo de fechas.");
+                return Swal.fire({
+                    icon: 'warning',
+                    title: 'Faltan Filtros',
+                    text: 'Por favor, seleccione el tipo de reporte y el rango completo de fechas.',
+                    confirmButtonColor: '#2D89EF'
+                });
             }
 
-            // Validación 2: EL ESCUDO CONTRA FECHAS INVERTIDAS
+            // Validación 2: EL ESCUDO CONTRA FECHAS INVERTIDAS con SweetAlert2
             if (fechaInicio > fechaFin) {
-                return alert("❌ Error: La Fecha de Inicio no puede ser mayor que la Fecha Final.");
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Rango Inválido',
+                    text: 'La Fecha de Inicio no puede ser mayor que la Fecha Final.',
+                    confirmButtonColor: '#2D89EF'
+                });
             }
 
             // Ocultamos el estado vacío y preparamos la tabla
@@ -1026,6 +1036,14 @@ document.addEventListener("DOMContentLoaded", function() {
             } catch (error) {
                 console.error("Error al cargar el reporte:", error);
                 cuerpoReporte.innerHTML = '<tr><td colspan="10" class="text-center text-danger fw-bold py-4">Error de conexión con el servidor.</td></tr>';
+                
+                // Alerta elegante de error de red
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de Conexión',
+                    text: 'No se pudo conectar con el servidor para generar el reporte.',
+                    confirmButtonColor: '#2D89EF'
+                });
             }
             
         });
@@ -1044,6 +1062,16 @@ document.addEventListener("DOMContentLoaded", function() {
             
             // Forzamos la descarga
             XLSX.writeFile(workbook, nombreArchivo);
+            
+            // Notificación sutil de éxito en la descarga
+            Swal.fire({
+                icon: 'success',
+                title: '¡Exportado con Éxito!',
+                text: `El archivo Excel ha sido descargado.`,
+                confirmButtonColor: '#2D89EF',
+                timer: 3000,
+                timerProgressBar: true
+            });
         });
 
         // ==========================================
