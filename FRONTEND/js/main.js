@@ -779,20 +779,17 @@ document.addEventListener("DOMContentLoaded", function() {
         if (btnGuardarFactura) {
             btnGuardarFactura.addEventListener('click', async function() {
                 if (!idOrden) {
-                    alert("No hay ninguna orden activa. Vaya a 'Orden Virtual' y genere una primero.");
-                    return;
+                    return Swal.fire({ icon: 'warning', title: 'Sin Orden Activa', text: 'Vaya a "Orden Virtual" y genere una primero.', confirmButtonColor: '#2D89EF' });
                 }
 
                 const metodoPago = document.getElementById('metodoPago').value;
                 if (!metodoPago) {
-                    alert("Por favor seleccione un Método de Pago antes de guardar.");
-                    return;
+                    return Swal.fire({ icon: 'warning', title: 'Falta Método de Pago', text: 'Por favor seleccione un Método de Pago antes de guardar.', confirmButtonColor: '#2D89EF' });
                 }
 
                 const totalFactura = parseFloat(totalInput.dataset.valorReal) || 0;
                 if (totalFactura <= 0) {
-                    alert("El Total a Pagar no puede ser cero. Asigne precios a los estudios.");
-                    return;
+                    return Swal.fire({ icon: 'warning', title: 'Total en Cero', text: 'El Total a Pagar no puede ser cero. Asigne precios a los estudios.', confirmButtonColor: '#2D89EF' });
                 }
 
                 // Empaquetar los estudios y sus precios
@@ -817,8 +814,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
 
                 if (detallesDTO.length === 0) {
-                    alert("Debe asignar precio válido a los estudios.");
-                    return;
+                    return Swal.fire({ icon: 'warning', title: 'Precios Inválidos', text: 'Debe asignar un precio válido a los estudios.', confirmButtonColor: '#2D89EF' });
                 }
 
                 const facturacionDTO = {
@@ -836,24 +832,31 @@ document.addEventListener("DOMContentLoaded", function() {
                     });
 
                     if (response.status === 201) {
-                        alert("¡Factura generada y cobrada con éxito!");
-                        
-                        // Limpiamos la memoria
-                        localStorage.removeItem('rado_ultima_orden_id');
-                        localStorage.removeItem('rado_estudios_orden_json');
-                        localStorage.removeItem('rado_direccion');
-                        localStorage.removeItem('rado_telefono');
-                        localStorage.removeItem('rado_correo');
-                        
-                        // Redirigir al Dashboard
-                        window.location.href = "dashboard.html";
+                        Swal.fire({
+                            title: '¡Factura Generada!',
+                            text: 'La factura ha sido generada y cobrada con éxito.',
+                            icon: 'success',
+                            confirmButtonColor: '#2D89EF',
+                            timer: 3000,
+                            timerProgressBar: true
+                        }).then(() => {
+                            // Limpiamos la memoria
+                            localStorage.removeItem('rado_ultima_orden_id');
+                            localStorage.removeItem('rado_estudios_orden_json');
+                            localStorage.removeItem('rado_direccion');
+                            localStorage.removeItem('rado_telefono');
+                            localStorage.removeItem('rado_correo');
+                            
+                            // Redirigir al Dashboard
+                            window.location.href = "dashboard.html";
+                        });
                     } else {
                         const errorMsg = await response.text();
-                        alert("Error al guardar la factura: " + errorMsg);
+                        Swal.fire({ icon: 'error', title: 'Error al facturar', text: errorMsg, confirmButtonColor: '#2D89EF' });
                     }
                 } catch (error) {
                     console.error("Error crítico:", error);
-                    alert("Error de conexión con el servidor backend.");
+                    Swal.fire({ icon: 'error', title: 'Error de conexión', text: 'No se pudo conectar con el servidor backend.', confirmButtonColor: '#2D89EF' });
                 }
             });
         }
